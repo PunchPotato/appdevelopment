@@ -1,10 +1,9 @@
-import tkinter as tk
-from tkinter import font
-from tkinter import *
-from PIL import ImageTk, Image
-from tkinter import messagebox
-import pymysql
 import os
+import tkinter as tk
+from tkinter import *
+from tkinter import font, messagebox
+import pymysql
+from PIL import Image, ImageTk
 
 
 class LoginPage(tk.Tk):

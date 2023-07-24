@@ -7,6 +7,8 @@ import pymysql
 import smtplib
 from email.mime.text import MIMEText
 import os
+import secrets
+import string
 
 
 class ForgotPasswordPage(tk.Tk):
@@ -32,7 +34,7 @@ class ForgotPasswordPage(tk.Tk):
         self.email_entry.place(y=385, x=150)
 
         reset_password_explanation = tk.Label(self,
-                                              text='Enter your email and you will be sent a link shortly to reset'
+                                              text='Enter your email and you will be sent a code shortly to reset'
                                                    ' your\n password',
                                               font=("typewriter", 15, "normal"),
                                               bg='white', fg='firebrick1')
@@ -64,14 +66,20 @@ class ForgotPasswordPage(tk.Tk):
         import Login
         Login.LoginPage().mainloop()
 
+    def generate_one_time_code(self, length=6):
+        characters = string.ascii_letters + string.digits
+        one_time_code = ''.join(secrets.choice(characters) for _ in range(length))
+        return one_time_code
+
     def send_email(self, to_address):
         smtp_server = os.environ.get('SMPT_SERVER')
         smtp_port = int(os.environ.get('SMPT_PORT'))
         sender_email = os.environ.get('MY_EMAIL')
         sender_password = os.environ.get('MY_PASSWORD')
 
-        subject = 'Test Email Subject'
-        message = 'This is a test email message.'
+        random_code = self.generate_one_time_code()
+        subject = 'Reset your password'
+        message = str(random_code)
 
         msg = MIMEText(message)
         msg['Subject'] = subject
@@ -98,6 +106,11 @@ class ForgotPasswordPage(tk.Tk):
             print(e)
             return False
 
+    def code_confirmation_page(self):
+        self.destroy()
+        import CodeConfirmation
+        CodeConfirmation.CodeConfirmationPage().mainloop()
+    
     def connect_to_email(self):
         email = self.email_entry.get().strip()
 
@@ -121,6 +134,7 @@ class ForgotPasswordPage(tk.Tk):
             else:
                 if self.send_email(email):
                     messagebox.showinfo('Success', 'Email has been sent.')
+                    self.code_confirmation_page()  # Fixed the method call by adding parentheses
                 else:
                     messagebox.showerror('Error', 'Failed to send email')
 

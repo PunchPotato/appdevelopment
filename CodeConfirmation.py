@@ -5,7 +5,6 @@ from PIL import ImageTk, Image
 from tkinter import messagebox
 from email.mime.text import MIMEText
 
-
 class CodeConfirmationPage(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -36,17 +35,19 @@ class CodeConfirmationPage(tk.Tk):
                                                activebackground='#0d2158',
                                                cursor='hand2',
                                                fg="white",
-                                               width=19,)
+                                               width=19,
+                                               )
         self.reset_password_button.place(x=215, y=580)
 
-        self.login_lable = Label(self, text="Or...", font=('Open Sans', 9), fg='firebrick1',
+        self.login_label = Label(self, text="Or...", font=('Open Sans', 9), fg='firebrick1',
                                  bg='white')
-        self.login_lable.place(x=325, y=680)
+        self.login_label.place(x=325, y=680)
 
         self.login_button = Button(self, text='Go back', font=('Open Sans', 9, 'bold underline'),
                                        fg='blue', bg='white', activeforeground='blue', activebackground='white',
                                        cursor='hand2', bd=0,)
         self.login_button.place(x=360, y=680)
+
 
 if __name__ == "__main__":
     code_confirmation_page = CodeConfirmationPage()

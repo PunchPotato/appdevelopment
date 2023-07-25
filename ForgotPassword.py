@@ -1,3 +1,4 @@
+import time
 import tkinter as tk
 from tkinter import font
 from tkinter import *
@@ -110,6 +111,7 @@ class ForgotPasswordPage(tk.Tk):
         self.destroy()
         import CodeConfirmation
         CodeConfirmation.CodeConfirmationPage().mainloop()
+        self.after(300000, self.delete_expired_codes)
     
     def connect_to_email(self):
         email = self.email_entry.get().strip()
@@ -122,7 +124,7 @@ class ForgotPasswordPage(tk.Tk):
         my_cursor = None
         try:
             con = pymysql.connect(host='localhost', user='root', password=os.environ.get('MYSQL_PASSWORD'),
-                                  database='mydatabase')
+                                database='mydatabase')
             my_cursor = con.cursor()
 
             query = 'SELECT * FROM user_data WHERE email = %s'
@@ -132,9 +134,17 @@ class ForgotPasswordPage(tk.Tk):
             if row is None:
                 messagebox.showerror('Error', 'Email is not valid')
             else:
+                random_code = self.generate_one_time_code()  # Generate the one-time code
+
+                # Update the existing row with the new one-time code and timestamp
+                update_query = "UPDATE user_data SET one_time_codes = %s, created_at = %s WHERE email = %s"
+                current_timestamp = int(time.time())  # Get the current timestamp
+                my_cursor.execute(update_query, (random_code, current_timestamp, email))
+                con.commit()
+
                 if self.send_email(email):
                     messagebox.showinfo('Success', 'Email has been sent.')
-                    self.code_confirmation_page()  # Fixed the method call by adding parentheses
+                    self.code_confirmation_page()
                 else:
                     messagebox.showerror('Error', 'Failed to send email')
 
@@ -145,11 +155,36 @@ class ForgotPasswordPage(tk.Tk):
             try:
                 if my_cursor is not None:
                     my_cursor.close()
+            except pymysql.Error:
+                pass
+    
+    def delete_expired_codes(self):
+        con = None
+        my_cursor = None
+        try:
+            con = pymysql.connect(host='localhost', user='root', password=os.environ.get('MYSQL_PASSWORD'),
+                                  database='mydatabase')
+            my_cursor = con.cursor()
+
+            # Calculate the timestamp for 5 minutes ago
+            five_minutes_ago = int(time.time()) - (5 * 60)
+
+            # Delete the expired codes from the database
+            delete_query = "DELETE FROM one_time_codes WHERE created_at <= %s"
+            my_cursor.execute(delete_query, (five_minutes_ago,))
+            con.commit()
+
+        except pymysql.Error as e:
+            print("Failed to connect to the database:", str(e))
+
+        finally:
+            try:
+                if my_cursor is not None:
+                    my_cursor.close()
                 if con is not None:
                     con.close()
             except pymysql.Error:
                 pass
-
 
 if __name__ == "__main__":
     forgot_password_page = ForgotPasswordPage()

@@ -3,11 +3,7 @@ from tkinter import font
 from tkinter import *
 from PIL import ImageTk, Image
 from tkinter import messagebox
-import pymysql
-import smtplib
 from email.mime.text import MIMEText
-import os
-
 
 class ResetPasswordPage(tk.Tk):
     def __init__(self):
@@ -37,15 +33,8 @@ class ResetPasswordPage(tk.Tk):
         self.comfirm_password_reset_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#0d2158', width=30)
         self.comfirm_password_reset_entry.place(y=485, x=150)
 
-        self.reset_password_button = tk.Button(self,
-                                               text="Reset Password",
-                                               font=("typewriter", 20, "bold"),
-                                               bd=0,
-                                               bg='#0d2158',
-                                               activebackground='#0d2158',
-                                               cursor='hand2',
-                                               fg="white",
-                                               width=19,)
+        self.reset_password_button = tk.Button(self, text="Reset Password", font=("typewriter", 20, "bold"), bd=0, bg='#0d2158',
+                                               activebackground='#0d2158', cursor='hand2', fg="white", width=19,)
         self.reset_password_button.place(x=215, y=580)
 
         self.login_lable = Label(self, text="Now...", font=('Open Sans', 9), fg='firebrick1',

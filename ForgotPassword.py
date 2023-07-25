@@ -11,7 +11,6 @@ import os
 import secrets
 import string
 
-
 class ForgotPasswordPage(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -108,10 +107,10 @@ class ForgotPasswordPage(tk.Tk):
             return False
 
     def code_confirmation_page(self):
+        self.after(300000, self.delete_expired_codes)
         self.destroy()
         import CodeConfirmation
         CodeConfirmation.CodeConfirmationPage().mainloop()
-        self.after(300000, self.delete_expired_codes)
     
     def connect_to_email(self):
         email = self.email_entry.get().strip()
@@ -119,7 +118,7 @@ class ForgotPasswordPage(tk.Tk):
         if email == '':
             messagebox.showerror("Error", "All fields must be filled.")
             return
-
+        
         con = None
         my_cursor = None
         try:
@@ -147,6 +146,7 @@ class ForgotPasswordPage(tk.Tk):
                     self.code_confirmation_page()
                 else:
                     messagebox.showerror('Error', 'Failed to send email')
+            
 
         except pymysql.Error as e:
             messagebox.showerror("Error", "Failed to connect to the database: " + str(e))

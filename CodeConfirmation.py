@@ -10,11 +10,12 @@ import pymysql
 from ForgotPassword import ForgotPasswordPage
 
 class CodeConfirmationPage(tk.Tk):
-    def __init__(self):
+    def __init__(self, email):
         super().__init__()
         self.geometry('720x980')
         self.title('Reset Password')
         self.custom_font = font.Font(family="typewriter", size=60, weight="normal")
+        self.email = email
         self.initialize_widgets()
 
     def initialize_widgets(self):
@@ -54,18 +55,20 @@ class CodeConfirmationPage(tk.Tk):
 
     def verify_code(self):
         entered_code = self.enter_code_entry.get().strip()
+        print(entered_code)
 
         if not entered_code:
             messagebox.showerror('Error', 'Code must be provided.')
             return
 
-        # Connect to the MySQL Server
+        print(self.email)
+        print(entered_code)
+
         try:
-            con = pymysql.connect(host='localhost', user='root', password= os.environ.get('MYSQL_PASSWORD'),
+            con = pymysql.connect(host='localhost', user='root', password=os.environ.get('MYSQL_PASSWORD'),
                                 database='mydatabase')
             my_cursor = con.cursor()
-            
-            # Check if the email and code match in the database
+
             query = "SELECT email FROM user_data WHERE email = %s AND one_time_codes = %s"
             my_cursor.execute(query, (self.email, entered_code))
             row = my_cursor.fetchone()
@@ -90,5 +93,12 @@ class CodeConfirmationPage(tk.Tk):
 
 
 if __name__ == "__main__":
-    code_confirmation_page = CodeConfirmationPage()
-    code_confirmation_page.mainloop()
+    app = ForgotPasswordPage()
+    app.mainloop()
+
+    # After the ForgotPasswordPage is closed, the user enters the email.
+    email = app.email  # Get the email entered by the user from the ForgotPasswordPage
+
+    if email:
+        code_confirmation_page = CodeConfirmationPage(email=email)
+        code_confirmation_page.mainloop()

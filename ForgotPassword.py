@@ -77,6 +77,7 @@ class ForgotPasswordPage(tk.Tk):
         sender_email = os.environ.get('MY_EMAIL')
         sender_password = os.environ.get('MY_PASSWORD')
 
+        global random_code
         random_code = self.generate_one_time_code()
         subject = 'Reset your password'
         message = str(random_code)
@@ -106,11 +107,11 @@ class ForgotPasswordPage(tk.Tk):
             print(e)
             return False
 
-    def code_confirmation_page(self):
+    def code_confirmation_page(self, email):
         self.after(300000, self.delete_expired_codes)
         self.destroy()
         import CodeConfirmation
-        CodeConfirmation.CodeConfirmationPage().mainloop()
+        CodeConfirmation.CodeConfirmationPage(email).mainloop()
     
     def connect_to_email(self):
         email = self.email_entry.get().strip()
@@ -133,7 +134,7 @@ class ForgotPasswordPage(tk.Tk):
             if row is None:
                 messagebox.showerror('Error', 'Email is not valid')
             else:
-                random_code = self.generate_one_time_code()  # Generate the one-time code
+                global random_code  # Generate the one-time code
 
                 # Update the existing row with the new one-time code and timestamp
                 update_query = "UPDATE user_data SET one_time_codes = %s, created_at = %s WHERE email = %s"
@@ -143,7 +144,7 @@ class ForgotPasswordPage(tk.Tk):
 
                 if self.send_email(email):
                     messagebox.showinfo('Success', 'Email has been sent.')
-                    self.code_confirmation_page()
+                    self.code_confirmation_page(email)
                 else:
                     messagebox.showerror('Error', 'Failed to send email')
             

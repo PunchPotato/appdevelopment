@@ -52,7 +52,12 @@ class CodeConfirmationPage(tk.Tk):
                                        fg='blue', bg='white', activeforeground='blue', activebackground='white',
                                        cursor='hand2', bd=0,)
         self.login_button.place(x=360, y=680)
-
+    
+    def reset_password_page(self):
+        self.destroy()
+        import ResetPassword
+        ResetPassword.ResetPasswordPage().mainloop()
+    
     def verify_code(self):
         entered_code = self.enter_code_entry.get().strip()
         print(entered_code)
@@ -75,7 +80,7 @@ class CodeConfirmationPage(tk.Tk):
 
             if row:
                 messagebox.showinfo('Success', 'Code is valid. Password reset can proceed.')
-                # Continue with the password reset process
+                self.reset_password_page()
             else:
                 messagebox.showerror('Error', 'Invalid code or email. Please try again.')
 

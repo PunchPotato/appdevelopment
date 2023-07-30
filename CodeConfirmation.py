@@ -6,7 +6,6 @@ from PIL import ImageTk, Image
 from tkinter import messagebox
 from email.mime.text import MIMEText
 import pymysql
-
 from ForgotPassword import ForgotPasswordPage
 
 class CodeConfirmationPage(tk.Tk):
@@ -27,10 +26,23 @@ class CodeConfirmationPage(tk.Tk):
         reset_password_title.place(y=140, x=70)
 
         enter_code_label = tk.Label(self, text='Enter Confirmation Code:', font=("typewriter", 15, "normal"), bg='white', fg='#0d2158')
-        enter_code_label.place(y=355, x=150)
+        enter_code_label.place(y=305, x=150)
 
         self.enter_code_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#0d2158', width=30)
-        self.enter_code_entry.place(y=385, x=150)
+        self.enter_code_entry.place(y=335, x=150)
+
+        password_reset_label = tk.Label(self, text='Enter Password:', font=("typewriter", 15, "normal"), bg='white', fg='#0d2158')
+        password_reset_label.place(y=405, x=150)
+
+        self.password_reset_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#0d2158', width=30)
+        self.password_reset_entry.place(y=435, x=150)
+
+        comfirm_password_reset_label = tk.Label(self, text='Comfirm Password:', font=("typewriter", 15, "normal"), bg='white', fg='#0d2158')
+        comfirm_password_reset_label.place(y=505, x=150)
+
+        self.comfirm_password_reset_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#0d2158', width=30)
+        self.comfirm_password_reset_entry.place(y=535, x=150)
+
 
         self.reset_password_button = tk.Button(self,
                                                text="Reset Password",
@@ -42,50 +54,60 @@ class CodeConfirmationPage(tk.Tk):
                                                fg="white",
                                                width=19,
                                                command=self.verify_code)
-        self.reset_password_button.place(x=215, y=580)
+        self.reset_password_button.place(x=215, y=630)
 
         self.login_label = Label(self, text="Or...", font=('Open Sans', 9), fg='firebrick1',
                                  bg='white')
-        self.login_label.place(x=325, y=680)
+        self.login_label.place(x=325, y=730)
 
         self.login_button = Button(self, text='Go back', font=('Open Sans', 9, 'bold underline'),
                                        fg='blue', bg='white', activeforeground='blue', activebackground='white',
                                        cursor='hand2', bd=0,)
-        self.login_button.place(x=360, y=680)
+        self.login_button.place(x=360, y=730)
     
-    def reset_password_page(self):
+    def login_page(self):
         self.destroy()
-        import ResetPassword
-        ResetPassword.ResetPasswordPage().mainloop()
+        import Login
+        Login.LoginPage().mainloop()
     
     def verify_code(self):
         entered_code = self.enter_code_entry.get().strip()
-        print(entered_code)
+        print("Entered code:", entered_code)
 
-        if not entered_code:
-            messagebox.showerror('Error', 'Code must be provided.')
+        if entered_code == '' or self.password_reset_entry.get() == '' or self.comfirm_password_reset_entry.get() == '':
+            messagebox.showerror("Error", "All fields must be filled.")
             return
-
-        print(self.email)
-        print(entered_code)
-
+        elif self.password_reset_entry.get() != self.comfirm_password_reset_entry.get():
+            messagebox.showerror("Error", "Password must match.")
+            return
+        
         try:
             con = pymysql.connect(host='localhost', user='root', password=os.environ.get('MYSQL_PASSWORD'),
                                 database='mydatabase')
-            my_cursor = con.cursor()
+            with con:
+                my_cursor = con.cursor()
 
-            query = "SELECT email FROM user_data WHERE email = %s AND one_time_codes = %s"
-            my_cursor.execute(query, (self.email, entered_code))
-            row = my_cursor.fetchone()
+                query = "SELECT email FROM user_data WHERE email = %s AND one_time_codes = %s"
+                my_cursor.execute(query, (self.email, entered_code))
+                row = my_cursor.fetchone()
 
-            if row:
-                messagebox.showinfo('Success', 'Code is valid. Password reset can proceed.')
-                self.reset_password_page()
-            else:
-                messagebox.showerror('Error', 'Invalid code or email. Please try again.')
+                if row:
+                    query = "UPDATE user_data SET password = %s WHERE email = %s"
+                    my_cursor.execute(query, (self.password_reset_entry.get(), self.email))
+                    con.commit()  # Commit the changes to the database
+
+                    messagebox.showinfo("Success", "Password reset successful.")
+                    self.login_page()
+                else:
+                    messagebox.showerror('Error', 'Invalid code or email. Please try again.')
 
         except pymysql.Error as e:
             messagebox.showerror("Error", "Failed to connect to the database: " + str(e))
+            print(f"Database error: {e}")
+
+        except Exception as e:
+            messagebox.showerror("Error", "An error occurred. Please try again.")
+            print(f"Error: {e}")
 
         finally:
             try:
@@ -95,7 +117,6 @@ class CodeConfirmationPage(tk.Tk):
                     con.close()
             except pymysql.Error:
                 pass
-
 
 if __name__ == "__main__":
     app = ForgotPasswordPage()

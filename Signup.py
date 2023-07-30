@@ -82,6 +82,7 @@ class SignupPage(tk.Tk):
         self.check.set(0)
 
     def login_page(self):
+        self.clear()
         self.destroy()
         import Login
         Login.LoginPage().mainloop()
@@ -113,10 +114,7 @@ class SignupPage(tk.Tk):
                 con.close()
 
                 messagebox.showinfo("Success", "Account created successfully!")
-                self.clear()
-                self.destroy()
-                import Login
-                Login.LoginPage().mainloop()
+                self.login_page()
 
         except pymysql.Error as e:
             messagebox.showerror("Error", f"Failed to connect to the database. Error: {str(e)}")

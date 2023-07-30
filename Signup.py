@@ -13,7 +13,7 @@ class SignupPage(tk.Tk):
         super().__init__()
         self.geometry('720x980')
         self.title('Sign Up')
-        self.custom_font = font.Font(family="typewriter", size=45, weight="normal")
+        self.custom_font = font.Font(family="typewriter", size=60, weight="normal")
         self.open_eye = None
         self.close_eye = None
         self.initialize_widgets()
@@ -23,56 +23,56 @@ class SignupPage(tk.Tk):
         self.bg_label = tk.Label(self, image=self.bg_image)
         self.bg_label.place(y=0, x=0)
 
-        create_account_title = tk.Label(self, text='CREATE AN ACCOUNT', font=self.custom_font, bg='white', fg='#0d2158')
-        create_account_title.place(y=100, x=30)
+        create_account_title = tk.Label(self, text='CREATE AN\n ACCOUNT', font=self.custom_font, bg='#b3b5ba', fg='#000000')
+        create_account_title.place(y=80, x=140)
 
-        email_title = tk.Label(self, text='Email:', font=("typewriter", 15, "normal"), bg='white', fg='#0d2158')
-        email_title.place(y=255, x=150)
+        email_title = tk.Label(self, text='Email:', font=("typewriter", 15, "normal"), bg='#b3b5ba', fg='#000000')
+        email_title.place(y=305, x=150)
 
-        self.email_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#0d2158', width=30)
-        self.email_entry.place(y=285, x=150)
+        self.email_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#000000', width=30)
+        self.email_entry.place(y=335, x=150)
 
-        username_title = tk.Label(self, text='Username:', font=("typewriter", 15, "normal"), bg='white', fg='#0d2158')
-        username_title.place(y=370, x=150)
+        username_title = tk.Label(self, text='Username:', font=("typewriter", 15, "normal"), bg='#b3b5ba', fg='#000000')
+        username_title.place(y=420, x=150)
 
-        self.username_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#0d2158', width=30)
-        self.username_entry.place(y=400, x=150)
+        self.username_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#000000', width=30)
+        self.username_entry.place(y=450, x=150)
 
-        password_title = tk.Label(self, text='Password:', font=("typewriter", 15, "normal"), bg='white', fg='#0d2158')
-        password_title.place(y=495, x=150)
+        password_title = tk.Label(self, text='Password:', font=("typewriter", 15, "normal"), bg='#b3b5ba', fg='#000000')
+        password_title.place(y=535, x=150)
 
-        self.password_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#0d2158', width=30)
-        self.password_entry.place(y=525, x=150)
+        self.password_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#000000', width=30)
+        self.password_entry.place(y=575, x=150)
 
-        confirm_password_title = tk.Label(self, text='Comfirm Password:', font=("typewriter", 15, "normal"), bg='white',
-                                          fg='#0d2158')
-        confirm_password_title.place(y=610, x=150)
+        confirm_password_title = tk.Label(self, text='Comfirm Password:', font=("typewriter", 15, "normal"), bg='#b3b5ba',
+                                          fg='#000000')
+        confirm_password_title.place(y=660, x=150)
 
-        self.password_comfirm_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#0d2158',
+        self.password_comfirm_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#000000',
                                                width=30)
-        self.password_comfirm_entry.place(y=640, x=150)
+        self.password_comfirm_entry.place(y=690, x=150)
 
         create_account_button = tk.Button(self, text="Create Account", font=("typewriter", 20, "bold"), bd=0,
-                                          bg='#0d2158', activebackground='#0d2158', cursor='hand2', fg="white",
+                                          bg='#000000', activebackground='#000000', cursor='hand2', fg="white",
                                           width=19, command=self.connect_database)
-        create_account_button.place(y=720, x=210)
+        create_account_button.place(y=800, x=210)
 
         self.terms_and_conditions_label= Label(self, text="I agree to Terms & Conditions", font=('Open Sans', 12),
-                                               fg='firebrick1', bg='white')
-        self.terms_and_conditions_label.place(x=270, y=685)
+                                               fg='#b50d3d', bg='#b3b5ba')
+        self.terms_and_conditions_label.place(x=270, y=735)
 
         self.check = IntVar()
-        terms_and_conditions_box = tk.Checkbutton(self, bd=0, bg='white', variable=self.check)
-        terms_and_conditions_box.place(x=245, y=685)
+        terms_and_conditions_box = tk.Checkbutton(self, bd=0, bg='#b3b5ba', variable=self.check)
+        terms_and_conditions_box.place(x=245, y=735)
 
-        self.signupLabel = Label(self, text="Or...", font=('Open Sans', 9), fg='firebrick1',
-                                 bg='white')
-        self.signupLabel.place(x=335, y=780)
+        self.signupLabel = Label(self, text="Or...", font=('Open Sans', 9), fg='#b50d3d',
+                                 bg='#b3b5ba')
+        self.signupLabel.place(x=335, y=870)
 
         self.newaccountButton = Button(self, text='Log In', font=('Open Sans', 9, 'bold underline'),
-                                       fg='blue', bg='white', activeforeground='blue', activebackground='white',
+                                       fg='blue', bg='#b3b5ba', activeforeground='blue', activebackground='#b3b5ba',
                                        cursor='hand2', bd=0, command=self.login_page)
-        self.newaccountButton.place(x=360, y=780)
+        self.newaccountButton.place(x=360, y=870)
 
     def clear(self):
         self.email_entry.delete(0, END)

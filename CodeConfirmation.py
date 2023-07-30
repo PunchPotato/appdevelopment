@@ -22,25 +22,25 @@ class CodeConfirmationPage(tk.Tk):
         self.bg_label = tk.Label(self, image=self.bg_image)
         self.bg_label.place(y=0, x=0)
 
-        reset_password_title = tk.Label(self, text='Reset Password', font=self.custom_font, bg='white', fg='#0d2158')
+        reset_password_title = tk.Label(self, text='Reset Password', font=self.custom_font, bg='#b3b5ba', fg='#000000')
         reset_password_title.place(y=140, x=70)
 
-        enter_code_label = tk.Label(self, text='Enter Confirmation Code:', font=("typewriter", 15, "normal"), bg='white', fg='#0d2158')
+        enter_code_label = tk.Label(self, text='Enter Confirmation Code:', font=("typewriter", 15, "normal"), bg='#b3b5ba', fg='#000000')
         enter_code_label.place(y=305, x=150)
 
-        self.enter_code_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#0d2158', width=30)
+        self.enter_code_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#000000', width=30)
         self.enter_code_entry.place(y=335, x=150)
 
-        password_reset_label = tk.Label(self, text='Enter Password:', font=("typewriter", 15, "normal"), bg='white', fg='#0d2158')
+        password_reset_label = tk.Label(self, text='Enter Password:', font=("typewriter", 15, "normal"), bg='#b3b5ba', fg='#000000')
         password_reset_label.place(y=405, x=150)
 
-        self.password_reset_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#0d2158', width=30)
+        self.password_reset_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#000000', width=30)
         self.password_reset_entry.place(y=435, x=150)
 
-        comfirm_password_reset_label = tk.Label(self, text='Comfirm Password:', font=("typewriter", 15, "normal"), bg='white', fg='#0d2158')
+        comfirm_password_reset_label = tk.Label(self, text='Comfirm Password:', font=("typewriter", 15, "normal"), bg='#b3b5ba', fg='#000000')
         comfirm_password_reset_label.place(y=505, x=150)
 
-        self.comfirm_password_reset_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#0d2158', width=30)
+        self.comfirm_password_reset_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#000000', width=30)
         self.comfirm_password_reset_entry.place(y=535, x=150)
 
 
@@ -48,20 +48,20 @@ class CodeConfirmationPage(tk.Tk):
                                                text="Reset Password",
                                                font=("typewriter", 20, "bold"),
                                                bd=0,
-                                               bg='#0d2158',
-                                               activebackground='#0d2158',
+                                               bg='#000000',
+                                               activebackground='#000000',
                                                cursor='hand2',
                                                fg="white",
                                                width=19,
                                                command=self.verify_code)
         self.reset_password_button.place(x=215, y=630)
 
-        self.login_label = Label(self, text="Or...", font=('Open Sans', 9), fg='firebrick1',
-                                 bg='white')
+        self.login_label = Label(self, text="Or...", font=('Open Sans', 9), fg='#b50d3d',
+                                 bg='#b3b5ba')
         self.login_label.place(x=325, y=730)
 
         self.login_button = Button(self, text='Go back', font=('Open Sans', 9, 'bold underline'),
-                                       fg='blue', bg='white', activeforeground='blue', activebackground='white',
+                                       fg='blue', bg='#b3b5ba', activeforeground='blue', activebackground='#000000',
                                        cursor='hand2', bd=0,)
         self.login_button.place(x=360, y=730)
     
@@ -80,6 +80,10 @@ class CodeConfirmationPage(tk.Tk):
         elif self.password_reset_entry.get() != self.comfirm_password_reset_entry.get():
             messagebox.showerror("Error", "Password must match.")
             return
+        elif len(self.password_reset_entry.get()) < 5 or not any(char.isupper() for char in self.password_reset_entry.get()) or len(self.comfirm_password_reset_entry.get()) < 5 or not any(char.isupper() for char in self.comfirm_password_reset_entry.get()):
+            messagebox.showerror("Error", "Password needs to be longer than 5 characters and include a capital letter.")
+            return
+
         
         try:
             con = pymysql.connect(host='localhost', user='root', password=os.environ.get('MYSQL_PASSWORD'),

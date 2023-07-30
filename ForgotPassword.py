@@ -24,40 +24,40 @@ class ForgotPasswordPage(tk.Tk):
         self.bg_label = tk.Label(self, image=self.bg_image)
         self.bg_label.place(y=0, x=0)
 
-        reset_password_title = tk.Label(self, text='Reset Password', font=self.custom_font, bg='white', fg='#0d2158')
+        reset_password_title = tk.Label(self, text='Reset Password', font=self.custom_font, bg='#b3b5ba', fg='#000000')
         reset_password_title.place(y=140, x=70)
 
-        email_label = tk.Label(self, text='Email:', font=("typewriter", 15, "normal"), bg='white', fg='#0d2158')
+        email_label = tk.Label(self, text='Email:', font=("typewriter", 15, "normal"), bg='#b3b5ba', fg='#000000')
         email_label.place(y=355, x=150)
 
-        self.email_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#0d2158', width=30)
+        self.email_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="white", bg='#000000', width=30)
         self.email_entry.place(y=385, x=150)
 
         reset_password_explanation = tk.Label(self,
                                               text='Enter your email and you will be sent a code shortly to reset'
                                                    ' your\n password',
                                               font=("typewriter", 15, "normal"),
-                                              bg='white', fg='firebrick1')
-        reset_password_explanation.place(y=230, x=100)
+                                              bg='#b3b5ba', fg='#b50d3d')
+        reset_password_explanation.place(y=230, x=75)
 
         self.reset_password_button = tk.Button(self,
                                                text="Reset Password",
                                                font=("typewriter", 20, "bold"),
                                                bd=0,
-                                               bg='#0d2158',
-                                               activebackground='#0d2158',
+                                               bg='#000000',
+                                               activebackground='#000000',
                                                cursor='hand2',
                                                fg="white",
                                                width=19,
                                                command=self.connect_to_email)
         self.reset_password_button.place(x=215, y=580)
 
-        self.login_lable = Label(self, text="Now...", font=('Open Sans', 9), fg='firebrick1',
-                                 bg='white')
+        self.login_lable = Label(self, text="Now...", font=('Open Sans', 9), fg='#b50d3d',
+                                 bg='#b3b5ba')
         self.login_lable.place(x=325, y=680)
 
         self.login_button = Button(self, text='Log In', font=('Open Sans', 9, 'bold underline'),
-                                       fg='blue', bg='white', activeforeground='blue', activebackground='white',
+                                       fg='blue', bg='#b3b5ba', activeforeground='blue', activebackground='#b3b5ba',
                                        cursor='hand2', bd=0, command=self.login_page)
         self.login_button.place(x=360, y=680)
 

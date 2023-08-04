@@ -103,6 +103,11 @@ class LoginPage(tk.Tk):
         self.destroy()
         import ForgotPassword
         ForgotPassword.ForgotPasswordPage().mainloop()
+    
+    def main_app(self):
+        self.destroy()
+        import Mainapp
+        Mainapp.MainApp().mainloop()
 
     def connect_database(self):
         if self.name_entry.get() == '' or self.password_entry.get() == '':
@@ -125,6 +130,7 @@ class LoginPage(tk.Tk):
                 messagebox.showerror("Error", "Invalid username or password.")
             else:
                 messagebox.showinfo("Success", "Login is successful.")
+                self.main_app()
 
 
 if __name__ == "__main__":

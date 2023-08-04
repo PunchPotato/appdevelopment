@@ -1,6 +1,8 @@
 import tkinter as tk
-from tkinter import font
+from tkinter import Button, font
 from PIL import ImageTk, Image
+import requests
+import os
 
 class Page1(tk.Frame):
     def __init__(self, parent, controller):
@@ -16,6 +18,15 @@ class Page1(tk.Frame):
         main_title = tk.Label(self, image=self.title_image, font=self.custom_font, bg='#b3b5ba', fg='#000000')
         main_title.place(y=20, x=240)
 
+        self.name_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="#000000", bd=0, bg='#b3b5ba')
+        self.name_entry.insert(0, "Username")
+        self.name_entry.place(y=350, x=220)
+
+        self.newaccountButton = Button(self, text='Create New One', font=('Open Sans', 9, 'bold underline'),
+                                       fg='blue', bg='#b3b5ba', activeforeground='blue', activebackground='#b3b5ba',
+                                       cursor='hand2', bd=0, command=self.API_connection)
+        self.newaccountButton.place(x=380, y=750)
+        
         self.calorie_button = ImageTk.PhotoImage(Image.open('Login page/cals button.png'))
         self.weight_button = ImageTk.PhotoImage(Image.open('Login page/weight button.png'))
         self.profile_button = ImageTk.PhotoImage(Image.open('Login page/profile button.png'))
@@ -26,11 +37,25 @@ class Page1(tk.Frame):
 
         button = tk.Button(self, image=self.weight_button,bd=10, bg='#b3b5ba', activebackground='#b3b5ba',
                             command=lambda: self.controller.show_frame(Page2))
-        button.place(y= 855, x = 280)
+        button.place(y= 855, x = 290)
 
         button = tk.Button(self, image=self.profile_button, bd=10, bg='#b3b5ba', activebackground='#b3b5ba',
                             cursor='hand2', command=lambda: self.controller.show_frame(Page3))
         button.place(y=855, x=580)
+
+    def API_connection(self):
+        self.query = self.name_entry.get().strip()
+        self.api_key = os.environ.get('MY_API_KEY')
+        print(self.api_key)
+        self.api_url = f'https://api.api-ninjas.com/v1/nutrition?query={self.query}'
+        self.headers = {'X-Api-Key': self.api_key}
+
+        self.response = requests.get(self.api_url, headers=self.headers)
+
+        if self.response.status_code == requests.codes.ok:
+            print(self.response.text)
+        else:
+            print("Error:", self.response.status_code, self.response.text)
 
 class Page2(tk.Frame):
     def __init__(self, parent, controller):
@@ -56,7 +81,7 @@ class Page2(tk.Frame):
 
         button = tk.Button(self, image=self.weight_button,bd=5, bg='#b3b5ba', activebackground='#b3b5ba',
                             command=lambda: self.controller.show_frame(Page2))
-        button.place(y= 860, x = 280)
+        button.place(y= 860, x = 290)
 
         button = tk.Button(self, image=self.profile_button, bd=10, bg='#b3b5ba', activebackground='#b3b5ba',
                             cursor='hand2', command=lambda: self.controller.show_frame(Page3))
@@ -86,7 +111,7 @@ class Page3(tk.Frame):
 
         button = tk.Button(self, image=self.weight_button,bd=10, bg='#b3b5ba', activebackground='#b3b5ba',
                             command=lambda: self.controller.show_frame(Page2))
-        button.place(y= 855, x = 280)
+        button.place(y= 855, x = 290)
 
         button = tk.Button(self, image=self.profile_button, bd=5, bg='#b3b5ba', activebackground='#b3b5ba',
                             cursor='hand2', command=lambda: self.controller.show_frame(Page3))

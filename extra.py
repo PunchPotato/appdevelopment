@@ -1,17 +1,13 @@
-import tkinter as tk
+import requests
 
-def button_clicked(event):
-    print("Button clicked!")
+query = '10 grams of kitkat'
+api_key = os.environ.get('MY_API_KEY')  # Replace this with your actual API key
+api_url = f'https://api.api-ninjas.com/v1/nutrition?query={query}'
+headers = {'X-Api-Key': api_key}
 
-# Create the main window
-window = tk.Tk()
+response = requests.get(api_url, headers=headers)
 
-# Create a button
-button = tk.Button(window, text="Click Me")
-button.pack()
-
-# Bind the button to a function
-button.bind("<Button-1>", button_clicked)
-
-# Run the main window's event loop
-window.mainloop()
+if response.status_code == requests.codes.ok:
+    print(response.text)
+else:
+    print("Error:", response.status_code, response.text)

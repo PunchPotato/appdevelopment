@@ -24,10 +24,10 @@ class Page1(tk.Frame):
         self.food_entry.place(y=250, x=220)
         self.food_entry.bind("<FocusIn>", self.temp_food_entry_text)
 
-        self.newaccountButton = Button(self, text='Create New One', font=('Open Sans', 9, 'bold underline'),
-                                       fg='blue', bg='#b3b5ba', activeforeground='blue', activebackground='#b3b5ba',
+        self.search_icon = ImageTk.PhotoImage(Image.open('Login page/search icon.png'))
+        self.newaccountButton = Button(self, image = self.search_icon, bg='#b3b5ba',activebackground='#b3b5ba',
                                        cursor='hand2', bd=0, command=self.API_connection)
-        self.newaccountButton.place(x=380, y=750)
+        self.newaccountButton.place(x=500, y=255)
         
         self.calorie_button = ImageTk.PhotoImage(Image.open('Login page/cals button.png'))
         self.weight_button = ImageTk.PhotoImage(Image.open('Login page/weight button.png'))
@@ -51,7 +51,7 @@ class Page1(tk.Frame):
     
     def API_connection(self,):    
         self.query = self.food_entry.get().strip()
-        self.api_key = 'KRpelPFhn27jaRg/KmezCA==yYyx9EZE4bqJdeYh'
+        self.api_key = os.environ.get('MY_API_KEY')
         self.api_url = f'https://api.api-ninjas.com/v1/nutrition?query={self.query}'
         self.headers = {'X-Api-Key': self.api_key}
 
@@ -74,6 +74,8 @@ class Page1(tk.Frame):
             self.sugar_g = self.data[0]["sugar_g"]
             self.label = Label(
             self.master,
+            bg='#b3b5ba',
+            font=("typewriter", 20, "normal"),
             text=f"Name: {self.name}\n"
                  f"Calories: {self.calories}\n"
                  f"Serving Size (g): {self.serving_size_g}\n"
@@ -87,11 +89,11 @@ class Page1(tk.Frame):
                  f"Fiber (g): {self.fiber_g}\n"
                  f"Sugar (g): {self.sugar_g}"
         )
-            self.label.place(y=400, x=200)
+            self.label.place(y=350, x=200)
         else:
             print("Error:", self.response.status_code, self.response.text)
-            self.label = Label(self, text="not working")
-            self.label.place(y=200, x= 200)
+            self.label = Label(self, text=str("Error:", self.response.status_code, self.response.text))
+            self.label.place(y=600, x= 200)
 
 class Page2(tk.Frame):
     def __init__(self, parent, controller):

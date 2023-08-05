@@ -51,7 +51,7 @@ class Page1(tk.Frame):
     
     def API_connection(self,):    
         self.query = self.food_entry.get().strip()
-        self.api_key = 'KRpelPFhn27jaRg/KmezCA==yYyx9EZE4bqJdeYh'
+        self.api_key = self.api_key = os.environ.get('MY_API_KEY')
         self.api_url = f'https://api.api-ninjas.com/v1/nutrition?query={self.query}'
         self.headers = {'X-Api-Key': self.api_key}
 

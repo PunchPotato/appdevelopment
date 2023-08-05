@@ -1,14 +1,26 @@
-import requests
-import os
+import tkinter as tk
+from tkinter import ttk
 
-query = '10 grams of kitkat'
-api_key = os.environ.get('MY_API_KEY')  # Replace this with your actual API key
-api_url = f'https://api.api-ninjas.com/v1/nutrition?query={query}'
-headers = {'X-Api-Key': api_key}
+root = tk.Tk()
+root.title("Scrollable Page")
+root.geometry("400x300")
 
-response = requests.get(api_url, headers=headers)
+canvas = tk.Canvas(root)
+scrollbar = ttk.Scrollbar(root, orient="vertical", command=canvas.yview)
+canvas.configure(yscrollcommand=scrollbar.set)
 
-if response.status_code == requests.codes.ok:
-    print(response.text)
-else:
-    print("Error:", response.status_code, response.text)
+frame = ttk.Frame(canvas)
+canvas.create_window((0, 0), window=frame, anchor="nw")
+
+def configure_canvas(event):
+    canvas.configure(scrollregion=canvas.bbox("all"))
+
+frame.bind("<Configure>", configure_canvas)
+
+for i in range(30):
+    tk.Label(frame, text=f"Element {i}").pack(pady=5)
+
+canvas.pack(side="left", fill="both", expand=True)
+scrollbar.pack(side="right", fill="y")
+
+root.mainloop()

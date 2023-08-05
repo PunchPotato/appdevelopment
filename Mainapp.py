@@ -1,11 +1,72 @@
 import tkinter as tk
 from tkinter import Button, Label, font
+from tkinter import ttk
 from PIL import ImageTk, Image
 import requests
 import os
 import json
 
 class Page1(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+        self.custom_font = font.Font(family="typewriter", size=60, weight="normal")
+        
+        canvas = tk.Canvas(self)
+        scrollbar = ttk.Scrollbar(self, orient="vertical", command=canvas.yview)
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        self.bg_image_top = ImageTk.PhotoImage(Image.open("Login page/top background.png"))
+        self.bg_label_top = tk.Label(self, image=self.bg_image_top)
+        self.bg_label_top.place(y=0, x=195)
+
+        self.bg_image_bottom = ImageTk.PhotoImage(Image.open("Login page/bottom background.png"))
+        self.bg_label_bottom = tk.Label(self, image=self.bg_image_bottom)
+        self.bg_label_bottom.place(y=835, x=0)
+
+        frame = ttk.Frame(canvas)
+        canvas.create_window((0, 0), window=frame, anchor="nw")
+
+        def configure_canvas(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+        frame.bind("<Configure>", configure_canvas)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        self.title_image = ImageTk.PhotoImage(Image.open('Login page/potential logo.png'))
+        main_title = tk.Label(self, image=self.title_image, bg='#b3b5ba', fg='#000000')
+        main_title.place(y=20, x=240)
+        
+        self.box_image = ImageTk.PhotoImage(Image.open("Login page/box.png"))
+        self.box = tk.Label(frame, image=self.box_image, bg='white', fg='#000000')
+        self.box.pack(pady=200, padx=60)
+
+        self.box = tk.Label(frame, image=self.box_image, bg='white', fg='#000000')
+        self.box.pack(pady=800, padx=60)
+
+        self.addfood_button = tk.Button(frame, text='Add Food', font=font.Font(family="typewriter", size=20, weight="normal"),
+                                         command=lambda: self.controller.show_frame(Page1AddFood))
+        self.addfood_button.pack(pady=240, padx= 400)
+
+        self.calorie_button = ImageTk.PhotoImage(Image.open('Login page/cals button.png'))
+        self.weight_button = ImageTk.PhotoImage(Image.open('Login page/weight button.png'))
+        self.profile_button = ImageTk.PhotoImage(Image.open('Login page/profile button.png'))
+
+        button = tk.Button(self, image=self.calorie_button, bd=5, bg='#b3b5ba', activebackground='#b3b5ba',
+                            cursor='hand2', command=lambda: self.controller.show_frame(Page1))
+        button.place(y=860, x=20)
+
+        button = tk.Button(self, image=self.weight_button,bd=10, bg='#b3b5ba', activebackground='#b3b5ba',
+                            command=lambda: self.controller.show_frame(Page2))
+        button.place(y= 855, x = 290)
+
+        button = tk.Button(self, image=self.profile_button, bd=10, bg='#b3b5ba', activebackground='#b3b5ba',
+                            cursor='hand2', command=lambda: self.controller.show_frame(Page3))
+        button.place(y=855, x=580)
+
+class Page1AddFood(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -168,7 +229,7 @@ class MainApp(tk.Tk):
         self.geometry('720x980')
         
         self.frames = {}
-        for F in (Page1, Page2, Page3):
+        for F in (Page1,Page1AddFood, Page2, Page3):
             frame = F(container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")

@@ -1,8 +1,9 @@
 import tkinter as tk
-from tkinter import Button, font
+from tkinter import Button, Label, font
 from PIL import ImageTk, Image
 import requests
 import os
+import json
 
 class Page1(tk.Frame):
     def __init__(self, parent, controller):
@@ -18,9 +19,10 @@ class Page1(tk.Frame):
         main_title = tk.Label(self, image=self.title_image, font=self.custom_font, bg='#b3b5ba', fg='#000000')
         main_title.place(y=20, x=240)
 
-        self.name_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="#000000", bd=0, bg='#b3b5ba')
-        self.name_entry.insert(0, "Username")
-        self.name_entry.place(y=350, x=220)
+        self.food_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="#000000", bd=0, bg='#b3b5ba')
+        self.food_entry.insert(0, "Search Food Here!")
+        self.food_entry.place(y=250, x=220)
+        self.food_entry.bind("<FocusIn>", self.temp_food_entry_text)
 
         self.newaccountButton = Button(self, text='Create New One', font=('Open Sans', 9, 'bold underline'),
                                        fg='blue', bg='#b3b5ba', activeforeground='blue', activebackground='#b3b5ba',
@@ -43,19 +45,53 @@ class Page1(tk.Frame):
                             cursor='hand2', command=lambda: self.controller.show_frame(Page3))
         button.place(y=855, x=580)
 
-    def API_connection(self):
-        self.query = self.name_entry.get().strip()
-        self.api_key = os.environ.get('MY_API_KEY')
-        print(self.api_key)
+    def temp_food_entry_text(self, event):
+        if  self.food_entry.get() == 'Search Food Here!':
+            self.food_entry.delete(0, "end")
+    
+    def API_connection(self,):    
+        self.query = self.food_entry.get().strip()
+        self.api_key = 'KRpelPFhn27jaRg/KmezCA==yYyx9EZE4bqJdeYh'
         self.api_url = f'https://api.api-ninjas.com/v1/nutrition?query={self.query}'
         self.headers = {'X-Api-Key': self.api_key}
 
         self.response = requests.get(self.api_url, headers=self.headers)
 
         if self.response.status_code == requests.codes.ok:
-            print(self.response.text)
+            self.json_data = self.response.text
+            self.data = json.loads(self.json_data)
+            self.name = self.data[0]["name"]
+            self.calories = self.data[0]["calories"]
+            self.serving_size_g = self.data[0]["serving_size_g"]
+            self.fat_total_g = self.data[0]["fat_total_g"]
+            self.fat_saturated_g = self.data[0]["fat_saturated_g"]
+            self.protein_g = self.data[0]["protein_g"]
+            self.sodium_mg = self.data[0]["sodium_mg"]
+            self.potassium_mg = self.data[0]["potassium_mg"]
+            self.cholesterol_mg = self.data[0]["cholesterol_mg"]
+            self.carbohydrates_total_g = self.data[0]["carbohydrates_total_g"]
+            self.fiber_g = self.data[0]["fiber_g"]
+            self.sugar_g = self.data[0]["sugar_g"]
+            self.label = Label(
+            self.master,
+            text=f"Name: {self.name}\n"
+                 f"Calories: {self.calories}\n"
+                 f"Serving Size (g): {self.serving_size_g}\n"
+                 f"Total Fat (g): {self.fat_total_g}\n"
+                 f"Saturated Fat (g): {self.fat_saturated_g}\n"
+                 f"Protein (g): {self.protein_g}\n"
+                 f"Sodium (mg): {self.sodium_mg}\n"
+                 f"Potassium (mg): {self.potassium_mg}\n"
+                 f"Cholesterol (mg): {self.cholesterol_mg}\n"
+                 f"Total Carbohydrates (g): {self.carbohydrates_total_g}\n"
+                 f"Fiber (g): {self.fiber_g}\n"
+                 f"Sugar (g): {self.sugar_g}"
+        )
+            self.label.place(y=400, x=200)
         else:
             print("Error:", self.response.status_code, self.response.text)
+            self.label = Label(self, text="not working")
+            self.label.place(y=200, x= 200)
 
 class Page2(tk.Frame):
     def __init__(self, parent, controller):

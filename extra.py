@@ -1,4 +1,5 @@
 import requests
+import os
 
 query = '10 grams of kitkat'
 api_key = os.environ.get('MY_API_KEY')  # Replace this with your actual API key

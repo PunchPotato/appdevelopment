@@ -73,6 +73,14 @@ class Page1(tk.Frame):
                             cursor='hand2', command=lambda: self.controller.show_frame(Page3))
         button.place(y=855, x=580)
 
+    def update_food_list(self, name, calories):
+    # Update the selected food label with the provided food name and calories
+        self.food_list = []
+        self.selected_food_label = tk.Label(self, text="", font=("typewriter", 20, "normal"))
+        self.selected_food_label.place(y=100, x=200)
+        self.selected_food_label.config(text=f"Selected Food: {name}, Calories: {calories}")
+        print(self.food_list)
+    
 
 class Page1AddFood(tk.Frame):
     def __init__(self, parent, controller):
@@ -100,9 +108,9 @@ class Page1AddFood(tk.Frame):
 
         self.add_food_button = ImageTk.PhotoImage(Image.open('Login page/add food button.png'))
 
-        button = tk.Button(self, image=self.add_food_button, bd=5, bg='#b3b5ba', activebackground='#b3b5ba',
+        add_food_button = tk.Button(self, image=self.add_food_button, bd=5, bg='#b3b5ba', activebackground='#b3b5ba',
                             cursor='hand2', command=self.add_food)
-        button.place(y=750, x=290)
+        add_food_button.place(y=750, x=290)
         
         self.calorie_button = ImageTk.PhotoImage(Image.open('Login page/cals button.png'))
         self.weight_button = ImageTk.PhotoImage(Image.open('Login page/weight button.png'))
@@ -121,7 +129,7 @@ class Page1AddFood(tk.Frame):
         button.place(y=855, x=580)
 
     def add_food(self):
-        pass
+        Page1.update_food_list(self, self.name, self.calories)
 
     def temp_food_entry_text(self, event):
         if  self.food_entry.get() == 'Search Food Here!':
@@ -135,21 +143,22 @@ class Page1AddFood(tk.Frame):
 
         self.response = requests.get(self.api_url, headers=self.headers)
 
+        self.json_data = self.response.text
+        self.data = json.loads(self.json_data)
+        self.name = self.data[0]["name"]
+        self.calories = self.data[0]["calories"]
+        self.serving_size_g = self.data[0]["serving_size_g"]
+        self.fat_total_g = self.data[0]["fat_total_g"]
+        self.fat_saturated_g = self.data[0]["fat_saturated_g"]
+        self.protein_g = self.data[0]["protein_g"]
+        self.sodium_mg = self.data[0]["sodium_mg"]
+        self.potassium_mg = self.data[0]["potassium_mg"]
+        self.cholesterol_mg = self.data[0]["cholesterol_mg"]
+        self.carbohydrates_total_g = self.data[0]["carbohydrates_total_g"]
+        self.fiber_g = self.data[0]["fiber_g"]
+        self.sugar_g = self.data[0]["sugar_g"]
+        
         if self.response.status_code == requests.codes.ok:
-            self.json_data = self.response.text
-            self.data = json.loads(self.json_data)
-            self.name = self.data[0]["name"]
-            self.calories = self.data[0]["calories"]
-            self.serving_size_g = self.data[0]["serving_size_g"]
-            self.fat_total_g = self.data[0]["fat_total_g"]
-            self.fat_saturated_g = self.data[0]["fat_saturated_g"]
-            self.protein_g = self.data[0]["protein_g"]
-            self.sodium_mg = self.data[0]["sodium_mg"]
-            self.potassium_mg = self.data[0]["potassium_mg"]
-            self.cholesterol_mg = self.data[0]["cholesterol_mg"]
-            self.carbohydrates_total_g = self.data[0]["carbohydrates_total_g"]
-            self.fiber_g = self.data[0]["fiber_g"]
-            self.sugar_g = self.data[0]["sugar_g"]
             self.label = Label(
             self.master,
             bg='#b3b5ba',

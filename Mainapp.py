@@ -73,13 +73,12 @@ class Page1(tk.Frame):
                             cursor='hand2', command=lambda: self.controller.show_frame(Page3))
         button.place(y=855, x=580)
 
-    def update_food_list(self, name, calories):
+        self.selected_food_label = tk.Label(frame, text="", font=("typewriter", 20, "normal"), bg='#b3b5ba')
+        self.selected_food_label.place(y=220, x=150)
+
+    def update_food(self, name, calories):
     # Update the selected food label with the provided food name and calories
-        self.food_list = []
-        self.selected_food_label = tk.Label(self, text="", font=("typewriter", 20, "normal"))
-        self.selected_food_label.place(y=100, x=200)
-        self.selected_food_label.config(text=f"Selected Food: {name}, Calories: {calories}")
-        print(self.food_list)
+        self.selected_food_label.config(text=f"{name}, {calories}".title())
     
 
 class Page1AddFood(tk.Frame):
@@ -129,7 +128,8 @@ class Page1AddFood(tk.Frame):
         button.place(y=855, x=580)
 
     def add_food(self):
-        Page1.update_food_list(self, self.name, self.calories)
+        page1_instance = self.controller.frames[Page1]
+        page1_instance.update_food(self.name, self.calories)
 
     def temp_food_entry_text(self, event):
         if  self.food_entry.get() == 'Search Food Here!':

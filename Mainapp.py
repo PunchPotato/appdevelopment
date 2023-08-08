@@ -17,38 +17,45 @@ class Page1(tk.Frame):
         canvas.configure(yscrollcommand=scrollbar.set)
 
         self.bg_image_top = ImageTk.PhotoImage(Image.open("Login page/top background.png"))
-        self.bg_label_top = tk.Label(self, image=self.bg_image_top)
+        self.bg_label_top = tk.Label(self, image=self.bg_image_top, bd=0, highlightthickness=0)
+        self.bg_label_top.image = self.bg_image_top
         self.bg_label_top.place(y=0, x=195)
 
         self.bg_image_bottom = ImageTk.PhotoImage(Image.open("Login page/bottom background.png"))
-        self.bg_label_bottom = tk.Label(self, image=self.bg_image_bottom)
+        self.bg_label_bottom = tk.Label(self, image=self.bg_image_bottom, bd=0, highlightthickness=0)
+        self.bg_label_bottom.image = self.bg_image_bottom
         self.bg_label_bottom.place(y=835, x=0)
-
         frame = ttk.Frame(canvas)
         canvas.create_window((0, 0), window=frame, anchor="nw")
 
         def configure_canvas(event):
             canvas.configure(scrollregion=canvas.bbox("all"))
 
+        def on_mouse_wheel(event):
+            canvas.yview_scroll(-1 * (event.delta // 120), "units")
+
         frame.bind("<Configure>", configure_canvas)
 
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
+        canvas.bind_all("<MouseWheel>", on_mouse_wheel)
+
+        
         self.title_image = ImageTk.PhotoImage(Image.open('Login page/potential logo.png'))
         main_title = tk.Label(self, image=self.title_image, bg='#b3b5ba', fg='#000000')
         main_title.place(y=20, x=240)
         
         self.box_image = ImageTk.PhotoImage(Image.open("Login page/box.png"))
-        self.box = tk.Label(frame, image=self.box_image, bg='white', fg='#000000')
+        self.box = tk.Label(frame, image=self.box_image, fg='#000000')
         self.box.pack(pady=200, padx=60)
 
-        self.box = tk.Label(frame, image=self.box_image, bg='white', fg='#000000')
+        self.box = tk.Label(frame, image=self.box_image, fg='#000000')
         self.box.pack(pady=800, padx=60)
 
         self.addfood_button = tk.Button(frame, text='Add Food', font=font.Font(family="typewriter", size=20, weight="normal"),
                                          command=lambda: self.controller.show_frame(Page1AddFood))
-        self.addfood_button.pack(pady=240, padx= 400)
+        self.addfood_button.place(y=300, x=100)
 
         self.calorie_button = ImageTk.PhotoImage(Image.open('Login page/cals button.png'))
         self.weight_button = ImageTk.PhotoImage(Image.open('Login page/weight button.png'))
@@ -65,6 +72,7 @@ class Page1(tk.Frame):
         button = tk.Button(self, image=self.profile_button, bd=10, bg='#b3b5ba', activebackground='#b3b5ba',
                             cursor='hand2', command=lambda: self.controller.show_frame(Page3))
         button.place(y=855, x=580)
+
 
 class Page1AddFood(tk.Frame):
     def __init__(self, parent, controller):
@@ -86,9 +94,15 @@ class Page1AddFood(tk.Frame):
         self.food_entry.bind("<FocusIn>", self.temp_food_entry_text)
 
         self.search_icon = ImageTk.PhotoImage(Image.open('Login page/search icon.png'))
-        self.newaccountButton = Button(self, image = self.search_icon, bg='#b3b5ba',activebackground='#b3b5ba',
+        self.searchiconbutton = Button(self, image = self.search_icon, bg='#b3b5ba',activebackground='#b3b5ba',
                                        cursor='hand2', bd=0, command=self.API_connection)
-        self.newaccountButton.place(x=500, y=255)
+        self.searchiconbutton.place(x=500, y=255)
+
+        self.add_food_button = ImageTk.PhotoImage(Image.open('Login page/add food button.png'))
+
+        button = tk.Button(self, image=self.add_food_button, bd=5, bg='#b3b5ba', activebackground='#b3b5ba',
+                            cursor='hand2', command=self.add_food)
+        button.place(y=750, x=290)
         
         self.calorie_button = ImageTk.PhotoImage(Image.open('Login page/cals button.png'))
         self.weight_button = ImageTk.PhotoImage(Image.open('Login page/weight button.png'))
@@ -105,6 +119,9 @@ class Page1AddFood(tk.Frame):
         button = tk.Button(self, image=self.profile_button, bd=10, bg='#b3b5ba', activebackground='#b3b5ba',
                             cursor='hand2', command=lambda: self.controller.show_frame(Page3))
         button.place(y=855, x=580)
+
+    def add_food(self):
+        pass
 
     def temp_food_entry_text(self, event):
         if  self.food_entry.get() == 'Search Food Here!':
@@ -156,6 +173,7 @@ class Page1AddFood(tk.Frame):
             self.label = Label(self, text=str("Error:", self.response.status_code, self.response.text))
             self.label.place(y=600, x= 200)
 
+
 class Page2(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -185,6 +203,7 @@ class Page2(tk.Frame):
         button = tk.Button(self, image=self.profile_button, bd=10, bg='#b3b5ba', activebackground='#b3b5ba',
                             cursor='hand2', command=lambda: self.controller.show_frame(Page3))
         button.place(y=855, x=580)
+
 
 class Page3(tk.Frame):
     def __init__(self, parent, controller):

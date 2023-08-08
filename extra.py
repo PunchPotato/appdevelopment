@@ -1,26 +1,24 @@
-import tkinter as tk
-from tkinter import ttk
+class ClassA:
+    def __init__(self, value):
+        self.value = value
 
-root = tk.Tk()
-root.title("Scrollable Page")
-root.geometry("400x300")
+    def print_value(self):
+        print(f"Value in ClassA: {self.value}")
 
-canvas = tk.Canvas(root)
-scrollbar = ttk.Scrollbar(root, orient="vertical", command=canvas.yview)
-canvas.configure(yscrollcommand=scrollbar.set)
+class ClassB:
+    def __init__(self, obj_a):
+        self.obj_a = obj_a
 
-frame = ttk.Frame(canvas)
-canvas.create_window((0, 0), window=frame, anchor="nw")
+    def add_attribute(self, attribute_name, attribute_value):
+        setattr(self.obj_a, attribute_name, attribute_value)
 
-def configure_canvas(event):
-    canvas.configure(scrollregion=canvas.bbox("all"))
 
-frame.bind("<Configure>", configure_canvas)
+# Create an instance of ClassA
+obj_a = ClassA(42)
 
-for i in range(30):
-    tk.Label(frame, text=f"Element {i}").pack(pady=5)
+# Create an instance of ClassB and add an attribute to ClassA
+obj_b = ClassB(obj_a)
+obj_b.add_attribute("new_attribute", "Hello, I'm a new attribute!")
 
-canvas.pack(side="left", fill="both", expand=True)
-scrollbar.pack(side="right", fill="y")
-
-root.mainloop()
+# Access the new attribute in ClassA
+print(obj_a.new_attribute)  # Output: Hello, I'm a new attribute!

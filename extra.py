@@ -1,24 +1,29 @@
-class ClassA:
-    def __init__(self, value):
-        self.value = value
+import tkinter as tk
 
-    def print_value(self):
-        print(f"Value in ClassA: {self.value}")
+def add_label():
+    global current_y
+    label_text = "Label {}".format(label_count)
+    label = tk.Label(text_widget, text=label_text)
+    text_widget.window_create("insert", window=label)
+    
+    # Update the vertical position for the next label
+    current_y += 100
 
-class ClassB:
-    def __init__(self, obj_a):
-        self.obj_a = obj_a
+    # Scroll to show the newly added label
+    text_widget.see("end")
 
-    def add_attribute(self, attribute_name, attribute_value):
-        setattr(self.obj_a, attribute_name, attribute_value)
+    label_count += 1
 
+root = tk.Tk()
+root.title("Labels with Adjusted Position")
 
-# Create an instance of ClassA
-obj_a = ClassA(42)
+text_widget = tk.Text(root)
+text_widget.pack()
 
-# Create an instance of ClassB and add an attribute to ClassA
-obj_b = ClassB(obj_a)
-obj_b.add_attribute("new_attribute", "Hello, I'm a new attribute!")
+add_button = tk.Button(root, text="Add Label", command=add_label)
+add_button.pack()
 
-# Access the new attribute in ClassA
-print(obj_a.new_attribute)  # Output: Hello, I'm a new attribute!
+current_y = 0  # Initial vertical position
+label_count = 1  # Counter for labels
+
+root.mainloop()

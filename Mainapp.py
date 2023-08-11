@@ -50,9 +50,6 @@ class Page1(tk.Frame):
         self.box = tk.Label(frame, image=self.box_image, fg='#000000')
         self.box.pack(pady=200, padx=60)
 
-        self.box = tk.Label(frame, image=self.box_image, fg='#000000')
-        self.box.pack(pady=800, padx=60)
-
         self.addfood_button = tk.Button(frame, text='Add Food', font=font.Font(family="typewriter", size=20, weight="normal"),
                                          command=lambda: self.controller.show_frame(Page1AddFood))
         self.addfood_button.place(y=300, x=100)
@@ -77,8 +74,8 @@ class Page1(tk.Frame):
         self.selected_food_label.place(y=220, x=150)
 
     def update_food(self, name, calories):
-    # Update the selected food label with the provided food name and calories
-        self.selected_food_label.config(text=f"{name}, {calories}".title())
+        self.selected_food_label.config(text=f"{name}, {calories}cals".title())
+        label += 1
     
 
 class Page1AddFood(tk.Frame):
@@ -87,9 +84,35 @@ class Page1AddFood(tk.Frame):
         self.controller = controller
         self.custom_font = font.Font(family="typewriter", size=60, weight="normal")
 
-        self.bg_image = ImageTk.PhotoImage(Image.open("Login page/Main app.png"))
-        self.bg_label = tk.Label(self, image=self.bg_image)
-        self.bg_label.place(y=0, x=0)
+        canvas = tk.Canvas(self)
+        scrollbar = ttk.Scrollbar(self, orient="vertical", command=canvas.yview)
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        self.bg_image_top = ImageTk.PhotoImage(Image.open("Login page/top background.png"))
+        self.bg_label_top = tk.Label(self, image=self.bg_image_top, bd=0, highlightthickness=0)
+        self.bg_label_top.image = self.bg_image_top
+        self.bg_label_top.place(y=0, x=195)
+
+        self.bg_image_bottom = ImageTk.PhotoImage(Image.open("Login page/bottom background.png"))
+        self.bg_label_bottom = tk.Label(self, image=self.bg_image_bottom, bd=0, highlightthickness=0)
+        self.bg_label_bottom.image = self.bg_image_bottom
+        self.bg_label_bottom.place(y=835, x=0)
+        frame = ttk.Frame(canvas)
+        canvas.create_window((0, 0), window=frame, anchor="nw")
+
+        def configure_canvas(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+        def on_mouse_wheel(event):
+            canvas.yview_scroll(-1 * (event.delta // 120), "units")
+
+        frame.bind("<Configure>", configure_canvas)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        canvas.bind_all("<MouseWheel>", on_mouse_wheel)
+
 
         self.title_image = ImageTk.PhotoImage(Image.open('Login page/potential logo.png'))
         main_title = tk.Label(self, image=self.title_image, font=self.custom_font, bg='#b3b5ba', fg='#000000')
@@ -189,9 +212,35 @@ class Page2(tk.Frame):
         self.controller = controller
         self.custom_font = font.Font(family="typewriter", size=60, weight="normal")
 
-        self.bg_image = ImageTk.PhotoImage(Image.open("Login page/Main app.png"))
-        self.bg_label = tk.Label(self, image=self.bg_image)
-        self.bg_label.place(y=0, x=0)
+        canvas = tk.Canvas(self)
+        scrollbar = ttk.Scrollbar(self, orient="vertical", command=canvas.yview)
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        self.bg_image_top = ImageTk.PhotoImage(Image.open("Login page/top background.png"))
+        self.bg_label_top = tk.Label(self, image=self.bg_image_top, bd=0, highlightthickness=0)
+        self.bg_label_top.image = self.bg_image_top
+        self.bg_label_top.place(y=0, x=195)
+
+        self.bg_image_bottom = ImageTk.PhotoImage(Image.open("Login page/bottom background.png"))
+        self.bg_label_bottom = tk.Label(self, image=self.bg_image_bottom, bd=0, highlightthickness=0)
+        self.bg_label_bottom.image = self.bg_image_bottom
+        self.bg_label_bottom.place(y=835, x=0)
+        frame = ttk.Frame(canvas)
+        canvas.create_window((0, 0), window=frame, anchor="nw")
+
+        def configure_canvas(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+        def on_mouse_wheel(event):
+            canvas.yview_scroll(-1 * (event.delta // 120), "units")
+
+        frame.bind("<Configure>", configure_canvas)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        canvas.bind_all("<MouseWheel>", on_mouse_wheel)
+
 
         self.title_image = ImageTk.PhotoImage(Image.open('Login page/potential logo.png'))
         main_title = tk.Label(self, image=self.title_image, font=self.custom_font, bg='#b3b5ba', fg='#000000')
@@ -220,9 +269,35 @@ class Page3(tk.Frame):
         self.controller = controller
         self.custom_font = font.Font(family="typewriter", size=60, weight="normal")
 
-        self.bg_image = ImageTk.PhotoImage(Image.open("Login page/Main app.png"))
-        self.bg_label = tk.Label(self, image=self.bg_image)
-        self.bg_label.place(y=0, x=0)
+        canvas = tk.Canvas(self)
+        scrollbar = ttk.Scrollbar(self, orient="vertical", command=canvas.yview)
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        self.bg_image_top = ImageTk.PhotoImage(Image.open("Login page/top background.png"))
+        self.bg_label_top = tk.Label(self, image=self.bg_image_top, bd=0, highlightthickness=0)
+        self.bg_label_top.image = self.bg_image_top
+        self.bg_label_top.place(y=0, x=195)
+
+        self.bg_image_bottom = ImageTk.PhotoImage(Image.open("Login page/bottom background.png"))
+        self.bg_label_bottom = tk.Label(self, image=self.bg_image_bottom, bd=0, highlightthickness=0)
+        self.bg_label_bottom.image = self.bg_image_bottom
+        self.bg_label_bottom.place(y=835, x=0)
+        frame = ttk.Frame(canvas)
+        canvas.create_window((0, 0), window=frame, anchor="nw")
+
+        def configure_canvas(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+        def on_mouse_wheel(event):
+            canvas.yview_scroll(-1 * (event.delta // 120), "units")
+
+        frame.bind("<Configure>", configure_canvas)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        canvas.bind_all("<MouseWheel>", on_mouse_wheel)
+
 
         self.title_image = ImageTk.PhotoImage(Image.open('Login page/potential logo.png'))
         main_title = tk.Label(self, image=self.title_image, font=self.custom_font, bg='#b3b5ba', fg='#000000')

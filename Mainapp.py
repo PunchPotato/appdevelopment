@@ -70,14 +70,15 @@ class Page1(tk.Frame):
                             cursor='hand2', command=lambda: self.controller.show_frame(Page3))
         button.place(y=855, x=580)
 
-        self.selected_food_label = tk.Label(frame, text="", font=("typewriter", 20, "normal"), bg='#b3b5ba')
+        self.selected_food_label = tk.Button(frame, text="", font=("typewriter", 20, "normal"), bg='#b3b5ba',
+                                             bd= 0,  command=lambda: self.controller.show_frame(Page1AddFood)) 
+        # make a food info page that inserts all of the details of the apple
         self.selected_food_label.place(y=220, x=150)
 
     def update_food(self, name, calories):
         self.selected_food_label.config(text=f"{name}, {calories}cals".title())
-        label += 1
+        
     
-
 class Page1AddFood(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)

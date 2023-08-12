@@ -1,29 +1,32 @@
-import tkinter as tk
+import requests
 
-def add_label():
-    global current_y
-    label_text = "Label {}".format(label_count)
-    label = tk.Label(text_widget, text=label_text)
-    text_widget.window_create("insert", window=label)
-    
-    # Update the vertical position for the next label
-    current_y += 100
+# Replace these with your actual API credentials
+api_id = "ca2310a8"
+api_key = "e105fb826a5867dd4102a90223738264	"
 
-    # Scroll to show the newly added label
-    text_widget.see("end")
+# Base URL for the Nutritionix API
+base_url = "https://trackapi.nutritionix.com/v2/natural/nutrients"
 
-    label_count += 1
+# Example input text
+input_text = "apple"
 
-root = tk.Tk()
-root.title("Labels with Adjusted Position")
+# Construct headers with API credentials
+headers = {
+    "x-app-id": api_id,
+    "x-app-key": api_key
+}
 
-text_widget = tk.Text(root)
-text_widget.pack()
+# Construct request parameters
+params = {
+    "query": input_text
+}
 
-add_button = tk.Button(root, text="Add Label", command=add_label)
-add_button.pack()
+# Make the API request
+response = requests.post(base_url, headers=headers, params=params)
 
-current_y = 0  # Initial vertical position
-label_count = 1  # Counter for labels
-
-root.mainloop()
+# Process the response
+if response.status_code == 200:
+    data = response.json()
+    print(data)
+else:
+    print("Error:", response.status_code)

@@ -225,28 +225,41 @@ class FoodInfoPage(tk.Frame):
         info_label = tk.Label(self, text="Food Information", font=self.custom_font, bg='#b3b5ba', fg='#000000')
         info_label.pack()
 
-        for key, label_text in [
-            ("name", "Name"),
-            ("calories", "Calories"),
-            ("serving_size_g", "Serving Size"),
-            ("fat_total_g", "Total Fat"),
-            ("fat_saturated_g", "Saturated Fat"),
-            ("protein_g", "Protein"),
-            ("sodium_mg", "Sodium"),
-            ("potassium_mg", "Potassium"),
-            ("cholesterol_mg", "Cholesterol"),
-            ("carbohydrates_total_g", "Total Carbohydrates"),
-            ("fiber_g", "Fiber"),
-            ("sugar_g", "Sugar")
-        ]:
-            value_label = tk.Label(
-                self,
-                text=f"{label_text}: {self.data[key]}",
-                font=self.custom_font,
-                bg='#b3b5ba',
-                fg='#000000'
-            )
-            value_label.pack()
+        food_name_label = tk.Label(self, text=f"Name: {self.data['name']}", font=self.custom_font, bg='#b3b5ba', fg='#000000')
+        food_name_label.pack()
+
+        calories_label = tk.Label(self, text=f"Calories: {self.data['calories']} cals", font=self.custom_font, bg='#b3b5ba', fg='#000000')
+        calories_label.pack()
+
+        serving_size_label = tk.Label(self, text=f"Serving Size: {self.data['serving_size_g']} g", font=self.custom_font, bg='#b3b5ba', fg='#000000')
+        serving_size_label.pack()
+
+        fat_total_label = tk.Label(self, text=f"Total Fat: {self.data['fat_total_g']} g", font=self.custom_font, bg='#b3b5ba', fg='#000000')
+        fat_total_label.pack()
+
+        fat_saturated_label = tk.Label(self, text=f"Saturated Fat: {self.data['fat_saturated_g']} g", font=self.custom_font, bg='#b3b5ba', fg='#000000')
+        fat_saturated_label.pack()
+
+        protein_label = tk.Label(self, text=f"Protein: {self.data['protein_g']} g", font=self.custom_font, bg='#b3b5ba', fg='#000000')
+        protein_label.pack()
+
+        sodium_label = tk.Label(self, text=f"Sodium: {self.data['sodium_mg']} mg", font=self.custom_font, bg='#b3b5ba', fg='#000000')
+        sodium_label.pack()
+
+        potassium_label = tk.Label(self, text=f"Potassium: {self.data['potassium_mg']} mg", font=self.custom_font, bg='#b3b5ba', fg='#000000')
+        potassium_label.pack()
+
+        cholesterol_label = tk.Label(self, text=f"Cholesterol: {self.data['cholesterol_mg']} mg", font=self.custom_font, bg='#b3b5ba', fg='#000000')
+        cholesterol_label.pack()
+
+        carbohydrates_label = tk.Label(self, text=f"Total Carbohydrates: {self.data['carbohydrates_total_g']} g", font=self.custom_font, bg='#b3b5ba', fg='#000000')
+        carbohydrates_label.pack()
+
+        fiber_label = tk.Label(self, text=f"Fiber: {self.data['fiber_g']} g", font=self.custom_font, bg='#b3b5ba', fg='#000000')
+        fiber_label.pack()
+
+        sugar_label = tk.Label(self, text=f"Sugar: {self.data['sugar_g']} g", font=self.custom_font, bg='#b3b5ba', fg='#000000')
+        sugar_label.pack()
 
         back_button = tk.Button(self, text="Back", font=self.custom_font, command=lambda: self.controller.show_frame(Page1AddFood))
         back_button.pack(pady=20)

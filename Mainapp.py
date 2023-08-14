@@ -24,7 +24,7 @@ class Page1(tk.Frame):
         self.bg_image_bottom = ImageTk.PhotoImage(Image.open("Login page/bottom background.png"))
         self.bg_label_bottom = tk.Label(self, image=self.bg_image_bottom, bd=0, highlightthickness=0)
         self.bg_label_bottom.image = self.bg_image_bottom
-        self.bg_label_bottom.place(y=835, x=0)
+        self.bg_label_bottom.place(y=840, x=0)
         frame = ttk.Frame(canvas)
         canvas.create_window((0, 0), window=frame, anchor="nw")
 
@@ -48,11 +48,11 @@ class Page1(tk.Frame):
         
         self.box_image = ImageTk.PhotoImage(Image.open("Login page/box.png"))
         self.box = tk.Label(frame, image=self.box_image, fg='#000000')
-        self.box.pack(pady=200, padx=60)
+        self.box.pack(pady=180, padx=60)
 
         self.addfood_button = tk.Button(frame, text='Add Food', font=font.Font(family="typewriter", size=20, weight="normal"),
                                          command=lambda: self.controller.show_frame(Page1AddFood))
-        self.addfood_button.place(y=300, x=100)
+        self.addfood_button.place(y=220, x=290)
 
         self.calorie_button = ImageTk.PhotoImage(Image.open('Login page/cals button.png'))
         self.weight_button = ImageTk.PhotoImage(Image.open('Login page/weight button.png'))
@@ -70,13 +70,14 @@ class Page1(tk.Frame):
                             cursor='hand2', command=lambda: self.controller.show_frame(Page3))
         button.place(y=855, x=580)
 
-        self.selected_food_label = tk.Button(frame, text="", font=("typewriter", 20, "normal"), bg='#b3b5ba',
-                                             bd= 0,  command=lambda: self.controller.show_frame(Page1AddFood)) 
+        self.selected_food_button = tk.Button(frame, text="", font=("typewriter", 20, "normal"), bg='#b3b5ba',
+                                             bd= 0,  command=lambda: self.controller.show_frame(FoodInfoPage)) 
         # make a food info page that inserts all of the details of the apple
-        self.selected_food_label.place(y=220, x=150)
+        self.selected_food_button.place(y=320, x=150)
+        #make it so that each time the food is placed it is placed 100 pixels lower
 
     def update_food(self, name, calories):
-        self.selected_food_label.config(text=f"{name}, {calories}cals".title())
+        self.selected_food_button.config(text=f"{name}, {calories}cals".title())
         
     
 class Page1AddFood(tk.Frame):
@@ -97,7 +98,7 @@ class Page1AddFood(tk.Frame):
         self.bg_image_bottom = ImageTk.PhotoImage(Image.open("Login page/bottom background.png"))
         self.bg_label_bottom = tk.Label(self, image=self.bg_image_bottom, bd=0, highlightthickness=0)
         self.bg_label_bottom.image = self.bg_image_bottom
-        self.bg_label_bottom.place(y=835, x=0)
+        self.bg_label_bottom.place(y=840, x=0)
         frame = ttk.Frame(canvas)
         canvas.create_window((0, 0), window=frame, anchor="nw")
 
@@ -181,10 +182,10 @@ class Page1AddFood(tk.Frame):
         self.carbohydrates_total_g = self.data[0]["carbohydrates_total_g"]
         self.fiber_g = self.data[0]["fiber_g"]
         self.sugar_g = self.data[0]["sugar_g"]
-        
+
         if self.response.status_code == requests.codes.ok:
             self.label = Label(
-            self.master,
+            self,
             bg='#b3b5ba',
             font=("typewriter", 20, "normal"),
             text=f"Name: {self.name}\n"
@@ -207,6 +208,50 @@ class Page1AddFood(tk.Frame):
             self.label.place(y=600, x= 200)
 
 
+class FoodInfoPage(tk.Frame):
+    def __init__(self, parent, controller, data):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+        self.custom_font = font.Font(family="typewriter", size=20, weight="normal")
+
+        self.data = data
+        self.create_widgets()
+
+    def create_widgets(self):
+        self.title_image = ImageTk.PhotoImage(Image.open('Login page/potential logo.png'))
+        main_title = tk.Label(self, image=self.title_image, font=self.custom_font, bg='#b3b5ba', fg='#000000')
+        main_title.pack(pady=20)
+
+        info_label = tk.Label(self, text="Food Information", font=self.custom_font, bg='#b3b5ba', fg='#000000')
+        info_label.pack()
+
+        for key, label_text in [
+            ("name", "Name"),
+            ("calories", "Calories"),
+            ("serving_size_g", "Serving Size"),
+            ("fat_total_g", "Total Fat"),
+            ("fat_saturated_g", "Saturated Fat"),
+            ("protein_g", "Protein"),
+            ("sodium_mg", "Sodium"),
+            ("potassium_mg", "Potassium"),
+            ("cholesterol_mg", "Cholesterol"),
+            ("carbohydrates_total_g", "Total Carbohydrates"),
+            ("fiber_g", "Fiber"),
+            ("sugar_g", "Sugar")
+        ]:
+            value_label = tk.Label(
+                self,
+                text=f"{label_text}: {self.data[key]}",
+                font=self.custom_font,
+                bg='#b3b5ba',
+                fg='#000000'
+            )
+            value_label.pack()
+
+        back_button = tk.Button(self, text="Back", font=self.custom_font, command=lambda: self.controller.show_frame(Page1AddFood))
+        back_button.pack(pady=20)
+        
+
 class Page2(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -225,7 +270,7 @@ class Page2(tk.Frame):
         self.bg_image_bottom = ImageTk.PhotoImage(Image.open("Login page/bottom background.png"))
         self.bg_label_bottom = tk.Label(self, image=self.bg_image_bottom, bd=0, highlightthickness=0)
         self.bg_label_bottom.image = self.bg_image_bottom
-        self.bg_label_bottom.place(y=835, x=0)
+        self.bg_label_bottom.place(y=840, x=0)
         frame = ttk.Frame(canvas)
         canvas.create_window((0, 0), window=frame, anchor="nw")
 
@@ -282,7 +327,7 @@ class Page3(tk.Frame):
         self.bg_image_bottom = ImageTk.PhotoImage(Image.open("Login page/bottom background.png"))
         self.bg_label_bottom = tk.Label(self, image=self.bg_image_bottom, bd=0, highlightthickness=0)
         self.bg_label_bottom.image = self.bg_image_bottom
-        self.bg_label_bottom.place(y=835, x=0)
+        self.bg_label_bottom.place(y=840, x=0)
         frame = ttk.Frame(canvas)
         canvas.create_window((0, 0), window=frame, anchor="nw")
 
@@ -325,7 +370,6 @@ class Page3(tk.Frame):
 class MainApp(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
-        
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
@@ -333,7 +377,7 @@ class MainApp(tk.Tk):
         self.geometry('720x980')
         
         self.frames = {}
-        for F in (Page1,Page1AddFood, Page2, Page3):
+        for F in (Page1,Page1AddFood, FoodInfoPage(self.data), Page2, Page3):
             frame = F(container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")

@@ -1,8 +1,8 @@
 import requests
 
 # Replace these with your actual API credentials
-api_id = "ca2310a8"
-api_key = "e105fb826a5867dd4102a90223738264	"
+api_id = ""
+api_key = ""
 
 # Base URL for the Nutritionix API
 base_url = "https://trackapi.nutritionix.com/v2/natural/nutrients"

@@ -155,6 +155,10 @@ class Page1AddFood(tk.Frame):
     def add_food(self):
         page1_instance = self.controller.frames[Page1]
         page1_instance.update_food(self.name, self.calories)
+        foodinfopage_instance = self.controller.frames[FoodInfoPage]
+        foodinfopage_instance.update_food(self.name, self.calories, self.serving_size_g, self.fat_total_g
+                                          ,self.fat_saturated_g, self.protein_g, self.sodium_mg, self.potassium_mg
+                                          ,self.cholesterol_mg, self.carbohydrates_total_g, self.fiber_g, self.sugar_g)
 
     def temp_food_entry_text(self, event):
         if  self.food_entry.get() == 'Search Food Here!':
@@ -209,60 +213,78 @@ class Page1AddFood(tk.Frame):
 
 
 class FoodInfoPage(tk.Frame):
-    def __init__(self, parent, controller, data):
+    def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        self.custom_font = font.Font(family="typewriter", size=20, weight="normal")
+        self.custom_font = font.Font(family="typewriter", size=60, weight="normal")
+        
+        canvas = tk.Canvas(self)
+        scrollbar = ttk.Scrollbar(self, orient="vertical", command=canvas.yview)
+        canvas.configure(yscrollcommand=scrollbar.set)
 
-        self.data = data
-        self.create_widgets()
+        self.bg_image_top = ImageTk.PhotoImage(Image.open("Login page/top background.png"))
+        self.bg_label_top = tk.Label(self, image=self.bg_image_top, bd=0, highlightthickness=0)
+        self.bg_label_top.image = self.bg_image_top
+        self.bg_label_top.place(y=0, x=195)
 
-    def create_widgets(self):
+        self.bg_image_bottom = ImageTk.PhotoImage(Image.open("Login page/bottom background.png"))
+        self.bg_label_bottom = tk.Label(self, image=self.bg_image_bottom, bd=0, highlightthickness=0)
+        self.bg_label_bottom.image = self.bg_image_bottom
+        self.bg_label_bottom.place(y=840, x=0)
+        frame = ttk.Frame(canvas)
+        canvas.create_window((0, 0), window=frame, anchor="nw")
+
+        def configure_canvas(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+        def on_mouse_wheel(event):
+            canvas.yview_scroll(-1 * (event.delta // 120), "units")
+
+        frame.bind("<Configure>", configure_canvas)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        canvas.bind_all("<MouseWheel>", on_mouse_wheel)
+
+        
         self.title_image = ImageTk.PhotoImage(Image.open('Login page/potential logo.png'))
-        main_title = tk.Label(self, image=self.title_image, font=self.custom_font, bg='#b3b5ba', fg='#000000')
-        main_title.pack(pady=20)
+        main_title = tk.Label(self, image=self.title_image, bg='#b3b5ba', fg='#000000')
+        main_title.place(y=20, x=240)
+        
+        self.small_box_image = ImageTk.PhotoImage(Image.open("Login page/smaller box.png"))
+        self.small_box = tk.Label(frame, image=self.small_box_image, fg='#000000')
+        self.small_box.pack(pady=100, padx=60)
 
-        info_label = tk.Label(self, text="Food Information", font=self.custom_font, bg='#b3b5ba', fg='#000000')
-        info_label.pack()
+        self.calorie_button = ImageTk.PhotoImage(Image.open('Login page/cals button.png'))
+        self.weight_button = ImageTk.PhotoImage(Image.open('Login page/weight button.png'))
+        self.profile_button = ImageTk.PhotoImage(Image.open('Login page/profile button.png'))
 
-        food_name_label = tk.Label(self, text=f"Name: {self.data['name']}", font=self.custom_font, bg='#b3b5ba', fg='#000000')
-        food_name_label.pack()
+        button = tk.Button(self, image=self.calorie_button, bd=5, bg='#b3b5ba', activebackground='#b3b5ba',
+                            cursor='hand2', command=lambda: self.controller.show_frame(Page1))
+        button.place(y=860, x=20)
 
-        calories_label = tk.Label(self, text=f"Calories: {self.data['calories']} cals", font=self.custom_font, bg='#b3b5ba', fg='#000000')
-        calories_label.pack()
+        button = tk.Button(self, image=self.weight_button,bd=10, bg='#b3b5ba', activebackground='#b3b5ba',
+                            command=lambda: self.controller.show_frame(Page2))
+        button.place(y= 855, x = 290)
 
-        serving_size_label = tk.Label(self, text=f"Serving Size: {self.data['serving_size_g']} g", font=self.custom_font, bg='#b3b5ba', fg='#000000')
-        serving_size_label.pack()
+        button = tk.Button(self, image=self.profile_button, bd=10, bg='#b3b5ba', activebackground='#b3b5ba',
+                            cursor='hand2', command=lambda: self.controller.show_frame(Page3))
+        button.place(y=855, x=580)
 
-        fat_total_label = tk.Label(self, text=f"Total Fat: {self.data['fat_total_g']} g", font=self.custom_font, bg='#b3b5ba', fg='#000000')
-        fat_total_label.pack()
+        self.selected_food_label = Label(frame, text="", font=("typewriter", 20, "normal"), bg='#b3b5ba',
+                                             bd= 0) 
+        self.selected_food_label.place(y=140, x=200)
+        #make it so that each time the food is placed it is placed 100 pixels lower
 
-        fat_saturated_label = tk.Label(self, text=f"Saturated Fat: {self.data['fat_saturated_g']} g", font=self.custom_font, bg='#b3b5ba', fg='#000000')
-        fat_saturated_label.pack()
+    def update_food(self, name, calories, serving_size_g, fat_total_g
+                                          ,fat_saturated_g, protein_g, sodium_mg, potassium_mg
+                                          ,cholesterol_mg, carbohydrates_total_g, fiber_g, sugar_g):
+        self.selected_food_label.config(text=f"{name},\n\nCalories: {calories}cals, \n\nServing Size:{serving_size_g}Grams, \n\nTotal Fat:{fat_total_g}Grams,"
+                                        f"\n\nSaturated Fat: {fat_saturated_g}Grams,\n\nProtein: {protein_g}Grams,\n\nCarbohydrates: {carbohydrates_total_g}Grams, "
+                                        f"\n\nFiber: {fiber_g}Grams, \n\nSugar: {sugar_g}Grams, \n\nCholesterol: {cholesterol_mg}Miligrams, "
+                                        f"\n\nSodium: {sodium_mg}Miligrams, \n\nPotassium: {potassium_mg}Miligrams".title())
 
-        protein_label = tk.Label(self, text=f"Protein: {self.data['protein_g']} g", font=self.custom_font, bg='#b3b5ba', fg='#000000')
-        protein_label.pack()
-
-        sodium_label = tk.Label(self, text=f"Sodium: {self.data['sodium_mg']} mg", font=self.custom_font, bg='#b3b5ba', fg='#000000')
-        sodium_label.pack()
-
-        potassium_label = tk.Label(self, text=f"Potassium: {self.data['potassium_mg']} mg", font=self.custom_font, bg='#b3b5ba', fg='#000000')
-        potassium_label.pack()
-
-        cholesterol_label = tk.Label(self, text=f"Cholesterol: {self.data['cholesterol_mg']} mg", font=self.custom_font, bg='#b3b5ba', fg='#000000')
-        cholesterol_label.pack()
-
-        carbohydrates_label = tk.Label(self, text=f"Total Carbohydrates: {self.data['carbohydrates_total_g']} g", font=self.custom_font, bg='#b3b5ba', fg='#000000')
-        carbohydrates_label.pack()
-
-        fiber_label = tk.Label(self, text=f"Fiber: {self.data['fiber_g']} g", font=self.custom_font, bg='#b3b5ba', fg='#000000')
-        fiber_label.pack()
-
-        sugar_label = tk.Label(self, text=f"Sugar: {self.data['sugar_g']} g", font=self.custom_font, bg='#b3b5ba', fg='#000000')
-        sugar_label.pack()
-
-        back_button = tk.Button(self, text="Back", font=self.custom_font, command=lambda: self.controller.show_frame(Page1AddFood))
-        back_button.pack(pady=20)
         
 
 class Page2(tk.Frame):
@@ -390,7 +412,7 @@ class MainApp(tk.Tk):
         self.geometry('720x980')
         
         self.frames = {}
-        for F in (Page1,Page1AddFood, FoodInfoPage(self.data), Page2, Page3):
+        for F in (Page1,Page1AddFood, FoodInfoPage, Page2, Page3):
             frame = F(container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")

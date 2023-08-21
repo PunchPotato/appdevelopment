@@ -73,15 +73,45 @@ class Page1(tk.Frame):
         button.place(y=855, x=580)
     
 
-    def update_food(self, name, calories):
+    def update_food(self, name, calories, serving_size_g, fat_total_g,
+                    fat_saturated_g, protein_g, sodium_mg, potassium_mg,
+                    cholesterol_mg, carbohydrates_total_g, fiber_g, sugar_g):
         self.new_button = tk.Button(self.frame, text="", font=("typewriter", 20, "normal"), bg='#b3b5ba', bd=0,
-                               command=lambda: self.controller.show_frame(FoodInfoPage))
-        self.new_button.config(text=f"{name}, {calories} cals".title())
+                                    command=lambda: self.show_food_info(name, calories, serving_size_g,
+                                                                      fat_total_g, fat_saturated_g,
+                                                                      protein_g, sodium_mg, potassium_mg,
+                                                                      cholesterol_mg, carbohydrates_total_g,
+                                                                      fiber_g, sugar_g))
         if self.buttons:
             self.current_y += 100
         self.new_button.place(y=self.current_y, x=200)
         self.new_button.config(text=f"{name}, {calories} cals".title())
+        self.new_button.nutrition = {
+            "name": name,
+            "calories": calories,
+            "serving_size_g": serving_size_g,
+            "fat_total_g": fat_total_g,
+            "fat_saturated_g": fat_saturated_g,
+            "protein_g": protein_g,
+            "sodium_mg": sodium_mg,
+            "potassium_mg": potassium_mg,
+            "cholesterol_mg": cholesterol_mg,
+            "carbohydrates_total_g": carbohydrates_total_g,
+            "fiber_g": fiber_g,
+            "sugar_g": sugar_g
+        }
         self.buttons.append(self.new_button)
+
+    def show_food_info(self, name, calories, serving_size_g, fat_total_g,
+                       fat_saturated_g, protein_g, sodium_mg, potassium_mg,
+                       cholesterol_mg, carbohydrates_total_g, fiber_g, sugar_g):
+        food_info_page_instance = self.controller.frames[FoodInfoPage]
+        food_info_page_instance.update_food(name, calories, serving_size_g,
+                                            fat_total_g, fat_saturated_g,
+                                            protein_g, sodium_mg, potassium_mg,
+                                            cholesterol_mg, carbohydrates_total_g,
+                                            fiber_g, sugar_g)
+        self.controller.show_frame(FoodInfoPage)
         
     
 class Page1AddFood(tk.Frame):
@@ -158,9 +188,7 @@ class Page1AddFood(tk.Frame):
 
     def add_food(self):
         page1_instance = self.controller.frames[Page1]
-        page1_instance.update_food(self.name, self.calories)
-        foodinfopage_instance = self.controller.frames[FoodInfoPage]
-        foodinfopage_instance.update_food(self.name, self.calories, self.serving_size_g, self.fat_total_g
+        page1_instance.update_food(self.name, self.calories, self.serving_size_g, self.fat_total_g
                                           ,self.fat_saturated_g, self.protein_g, self.sodium_mg, self.potassium_mg
                                           ,self.cholesterol_mg, self.carbohydrates_total_g, self.fiber_g, self.sugar_g)
 
@@ -278,15 +306,27 @@ class FoodInfoPage(tk.Frame):
 
         self.selected_food_label = Label(frame, text="", font=("typewriter", 20, "normal"), bg='#b3b5ba',
                                              bd= 0) 
-        self.selected_food_label.place(y=140, x=200)
+        self.selected_food_label.place(y=200, x=200)
 
-    def update_food(self, name, calories, serving_size_g, fat_total_g
-                                          ,fat_saturated_g, protein_g, sodium_mg, potassium_mg
-                                          ,cholesterol_mg, carbohydrates_total_g, fiber_g, sugar_g):
-        self.selected_food_label.config(text=f"{name},\n\nCalories: {calories}cals, \n\nServing Size:{serving_size_g}Grams, \n\nTotal Fat:{fat_total_g}Grams,"
-                                        f"\n\nSaturated Fat: {fat_saturated_g}Grams,\n\nProtein: {protein_g}Grams,\n\nCarbohydrates: {carbohydrates_total_g}Grams, "
-                                        f"\n\nFiber: {fiber_g}Grams, \n\nSugar: {sugar_g}Grams, \n\nCholesterol: {cholesterol_mg}Miligrams, "
-                                        f"\n\nSodium: {sodium_mg}Miligrams, \n\nPotassium: {potassium_mg}Miligrams".title())
+    def update_food(self, name, calories, serving_size_g, fat_total_g,
+                fat_saturated_g, protein_g, sodium_mg, potassium_mg,
+                cholesterol_mg, carbohydrates_total_g, fiber_g, sugar_g):
+        info_text = (
+            f"{name.title()},\n\n"
+            f"Calories: {calories} cals,\n"
+            f"Serving Size: {serving_size_g} Grams,\n"
+            f"Total Fat: {fat_total_g} Grams,\n"
+            f"Saturated Fat: {fat_saturated_g} Grams,\n"
+            f"Protein: {protein_g} Grams,\n"
+            f"Carbohydrates: {carbohydrates_total_g} Grams,\n"
+            f"Fiber: {fiber_g} Grams,\n"
+            f"Sugar: {sugar_g} Grams,\n"
+            f"Cholesterol: {cholesterol_mg} Milligrams,\n"
+            f"Sodium: {sodium_mg} Milligrams,\n"
+            f"Potassium: {potassium_mg} Milligrams"
+        )
+
+        self.selected_food_label.config(text=info_text)
 
         
 

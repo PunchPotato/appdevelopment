@@ -11,6 +11,8 @@ class Page1(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.custom_font = font.Font(family="typewriter", size=60, weight="normal")
+        self.buttons = []
+        self.current_y = 340
         
         canvas = tk.Canvas(self)
         scrollbar = ttk.Scrollbar(self, orient="vertical", command=canvas.yview)
@@ -25,8 +27,8 @@ class Page1(tk.Frame):
         self.bg_label_bottom = tk.Label(self, image=self.bg_image_bottom, bd=0, highlightthickness=0)
         self.bg_label_bottom.image = self.bg_image_bottom
         self.bg_label_bottom.place(y=840, x=0)
-        frame = ttk.Frame(canvas)
-        canvas.create_window((0, 0), window=frame, anchor="nw")
+        self.frame = ttk.Frame(canvas)
+        canvas.create_window((0, 0), window=self.frame, anchor="nw")
 
         def configure_canvas(event):
             canvas.configure(scrollregion=canvas.bbox("all"))
@@ -34,7 +36,7 @@ class Page1(tk.Frame):
         def on_mouse_wheel(event):
             canvas.yview_scroll(-1 * (event.delta // 120), "units")
 
-        frame.bind("<Configure>", configure_canvas)
+        self.frame.bind("<Configure>", configure_canvas)
 
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
@@ -47,10 +49,10 @@ class Page1(tk.Frame):
         main_title.place(y=20, x=240)
         
         self.box_image = ImageTk.PhotoImage(Image.open("Login page/box.png"))
-        self.box = tk.Label(frame, image=self.box_image, fg='#000000')
+        self.box = tk.Label(self.frame, image=self.box_image, fg='#000000')
         self.box.pack(pady=180, padx=60)
 
-        self.addfood_button = tk.Button(frame, text='Add Food', font=font.Font(family="typewriter", size=20, weight="normal"),
+        self.addfood_button = tk.Button(self.frame, text='Add Food', font=font.Font(family="typewriter", size=20, weight="normal"),
                                          command=lambda: self.controller.show_frame(Page1AddFood))
         self.addfood_button.place(y=220, x=290)
 
@@ -69,15 +71,17 @@ class Page1(tk.Frame):
         button = tk.Button(self, image=self.profile_button, bd=10, bg='#b3b5ba', activebackground='#b3b5ba',
                             cursor='hand2', command=lambda: self.controller.show_frame(Page3))
         button.place(y=855, x=580)
-
-        self.selected_food_button = tk.Button(frame, text="", font=("typewriter", 20, "normal"), bg='#b3b5ba',
-                                             bd= 0,  command=lambda: self.controller.show_frame(FoodInfoPage)) 
-        # make a food info page that inserts all of the details of the apple
-        self.selected_food_button.place(y=320, x=150)
-        #make it so that each time the food is placed it is placed 100 pixels lower
+    
 
     def update_food(self, name, calories):
-        self.selected_food_button.config(text=f"{name}, {calories}cals".title())
+        self.new_button = tk.Button(self.frame, text="", font=("typewriter", 20, "normal"), bg='#b3b5ba', bd=0,
+                               command=lambda: self.controller.show_frame(FoodInfoPage))
+        self.new_button.config(text=f"{name}, {calories} cals".title())
+        if self.buttons:
+            self.current_y += 100
+        self.new_button.place(y=self.current_y, x=200)
+        self.new_button.config(text=f"{name}, {calories} cals".title())
+        self.buttons.append(self.new_button)
         
     
 class Page1AddFood(tk.Frame):
@@ -275,7 +279,6 @@ class FoodInfoPage(tk.Frame):
         self.selected_food_label = Label(frame, text="", font=("typewriter", 20, "normal"), bg='#b3b5ba',
                                              bd= 0) 
         self.selected_food_label.place(y=140, x=200)
-        #make it so that each time the food is placed it is placed 100 pixels lower
 
     def update_food(self, name, calories, serving_size_g, fat_total_g
                                           ,fat_saturated_g, protein_g, sodium_mg, potassium_mg

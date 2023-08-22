@@ -12,7 +12,9 @@ class Page1(tk.Frame):
         self.controller = controller
         self.custom_font = font.Font(family="typewriter", size=60, weight="normal")
         self.buttons = []
+        self.boxs = []
         self.current_y = 340
+        self.current_y_box = 240
         
         canvas = tk.Canvas(self)
         scrollbar = ttk.Scrollbar(self, orient="vertical", command=canvas.yview)
@@ -50,11 +52,11 @@ class Page1(tk.Frame):
         
         self.box_image = ImageTk.PhotoImage(Image.open("Login page/box.png"))
         self.box = tk.Label(self.frame, image=self.box_image, fg='#000000')
-        self.box.pack(pady=180, padx=60)
+    
 
         self.addfood_button = tk.Button(self.frame, text='Add Food', font=font.Font(family="typewriter", size=20, weight="normal"),
                                          command=lambda: self.controller.show_frame(Page1AddFood))
-        self.addfood_button.place(y=220, x=290)
+        self.addfood_button.pack(pady=self.current_y_box, padx=60)
 
         self.calorie_button = ImageTk.PhotoImage(Image.open('Login page/cals button.png'))
         self.weight_button = ImageTk.PhotoImage(Image.open('Login page/weight button.png'))
@@ -82,6 +84,11 @@ class Page1(tk.Frame):
                                                                       protein_g, sodium_mg, potassium_mg,
                                                                       cholesterol_mg, carbohydrates_total_g,
                                                                       fiber_g, sugar_g))
+        if self.boxs:
+            self.current_y_box += 100
+        self.box.pack(pady=self.current_y_box, padx=60)
+        self.boxs.append(self.box)
+        
         if self.buttons:
             self.current_y += 100
         self.new_button.place(y=self.current_y, x=200)
@@ -286,7 +293,7 @@ class FoodInfoPage(tk.Frame):
         
         self.small_box_image = ImageTk.PhotoImage(Image.open("Login page/smaller box.png"))
         self.small_box = tk.Label(frame, image=self.small_box_image, fg='#000000')
-        self.small_box.pack(pady=100, padx=60)
+        self.small_box.pack(pady=180, padx=60)
 
         self.calorie_button = ImageTk.PhotoImage(Image.open('Login page/cals button.png'))
         self.weight_button = ImageTk.PhotoImage(Image.open('Login page/weight button.png'))
@@ -306,7 +313,7 @@ class FoodInfoPage(tk.Frame):
 
         self.selected_food_label = Label(frame, text="", font=("typewriter", 20, "normal"), bg='#b3b5ba',
                                              bd= 0) 
-        self.selected_food_label.place(y=200, x=200)
+        self.selected_food_label.place(y=240, x=200)
 
     def update_food(self, name, calories, serving_size_g, fat_total_g,
                 fat_saturated_g, protein_g, sodium_mg, potassium_mg,

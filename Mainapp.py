@@ -13,8 +13,8 @@ class Page1(tk.Frame):
         self.custom_font = font.Font(family="typewriter", size=60, weight="normal")
         self.buttons = []
         self.boxs = []
-        self.current_y = 340
-        self.current_y_box = 240
+        self.current_y = 0
+        self.current_y_box = 340
         self.total_calories = 0
         custom_font_path = "Login page/impact.ttf"
         custom_font = font.Font(family=custom_font_path, size=20, weight="bold")
@@ -52,10 +52,10 @@ class Page1(tk.Frame):
         main_title = tk.Label(self, image=self.title_image, bg='#b3b5ba', fg='#000000')
         main_title.place(y=20, x=240)
         
-        self.box_image = ImageTk.PhotoImage(Image.open("Login page/box.png"))
+        self.box_image = ImageTk.PhotoImage(Image.open("Login page/very small box.png"))
         self.box = tk.Label(self.frame, image=self.box_image, fg='#000000')
     
-        self.calorie_sum_label = tk.Label(self, text=f'Total Calories: {self.total_calories}', font=custom_font)
+        self.calorie_sum_label = tk.Label(self.frame, text=f'Total Calories: {self.total_calories}', font=custom_font)
         self.calorie_sum_label.place(y=120, x=75)
 
         self.addfood_button = tk.Button(self.frame, text='Add Food', font=custom_font,
@@ -92,14 +92,16 @@ class Page1(tk.Frame):
                                                                       protein_g, sodium_mg, potassium_mg,
                                                                       cholesterol_mg, carbohydrates_total_g,
                                                                       fiber_g, sugar_g))
-        if self.boxs:
-            self.current_y_box += 100
-        self.box.pack(pady=self.current_y_box, padx=60)
-        self.boxs.append(self.box)
         
+        #if self.boxs:
+        #    self.current_y_box += 100
+        #self.box = tk.Label(self.frame, image=self.box_image, fg='#000000')
+        #self.box.place(y=self.current_y_box, x=60)
+        #self.boxs.append(self.box)
+
         if self.buttons:
-            self.current_y += 100
-        self.new_button.place(y=self.current_y, x=200)
+            self.current_y += 10
+        self.new_button.pack(pady=self.current_y, padx=200)
         self.new_button.config(text=f"{name}, {calories} cals".title())
         self.new_button.nutrition = {
             "name": name,
@@ -120,6 +122,7 @@ class Page1(tk.Frame):
         self.total_calories += calories
         self.calorie_sum_label.config(text=f'Total Calories: {self.total_calories}')
         self.calorie_sum_label.place(y=120, x=75)
+
 
     def show_food_info(self, name, calories, serving_size_g, fat_total_g,
                        fat_saturated_g, protein_g, sodium_mg, potassium_mg,

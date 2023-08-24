@@ -15,6 +15,9 @@ class Page1(tk.Frame):
         self.boxs = []
         self.current_y = 340
         self.current_y_box = 240
+        self.total_calories = 0
+        custom_font_path = "Login page/impact.ttf"
+        custom_font = font.Font(family=custom_font_path, size=20, weight="bold")
         
         canvas = tk.Canvas(self)
         scrollbar = ttk.Scrollbar(self, orient="vertical", command=canvas.yview)
@@ -44,7 +47,6 @@ class Page1(tk.Frame):
         scrollbar.pack(side="right", fill="y")
 
         canvas.bind_all("<MouseWheel>", on_mouse_wheel)
-
         
         self.title_image = ImageTk.PhotoImage(Image.open('Login page/potential logo.png'))
         main_title = tk.Label(self, image=self.title_image, bg='#b3b5ba', fg='#000000')
@@ -53,10 +55,12 @@ class Page1(tk.Frame):
         self.box_image = ImageTk.PhotoImage(Image.open("Login page/box.png"))
         self.box = tk.Label(self.frame, image=self.box_image, fg='#000000')
     
+        self.calorie_sum_label = tk.Label(self, text=f'Total Calories: {self.total_calories}', font=custom_font)
+        self.calorie_sum_label.place(y=120, x=75)
 
-        self.addfood_button = tk.Button(self.frame, text='Add Food', font=font.Font(family="typewriter", size=20, weight="normal"),
+        self.addfood_button = tk.Button(self.frame, text='Add Food', font=custom_font,
                                          command=lambda: self.controller.show_frame(Page1AddFood))
-        self.addfood_button.pack(pady=self.current_y_box, padx=60)
+        self.addfood_button.pack(padx=280, pady=200)
 
         self.calorie_button = ImageTk.PhotoImage(Image.open('Login page/cals button.png'))
         self.weight_button = ImageTk.PhotoImage(Image.open('Login page/weight button.png'))
@@ -78,7 +82,11 @@ class Page1(tk.Frame):
     def update_food(self, name, calories, serving_size_g, fat_total_g,
                     fat_saturated_g, protein_g, sodium_mg, potassium_mg,
                     cholesterol_mg, carbohydrates_total_g, fiber_g, sugar_g):
-        self.new_button = tk.Button(self.frame, text="", font=("typewriter", 20, "normal"), bg='#b3b5ba', bd=0,
+        custom_font_path = "Login page/impact.ttf"
+        custom_font = font.Font(family=custom_font_path, size=20, weight="bold")
+
+
+        self.new_button = tk.Button(self.frame, text="", font=custom_font, bg='#b3b5ba', bd=0,
                                     command=lambda: self.show_food_info(name, calories, serving_size_g,
                                                                       fat_total_g, fat_saturated_g,
                                                                       protein_g, sodium_mg, potassium_mg,
@@ -109,6 +117,10 @@ class Page1(tk.Frame):
         }
         self.buttons.append(self.new_button)
 
+        self.total_calories += calories
+        self.calorie_sum_label.config(text=f'Total Calories: {self.total_calories}')
+        self.calorie_sum_label.place(y=120, x=75)
+
     def show_food_info(self, name, calories, serving_size_g, fat_total_g,
                        fat_saturated_g, protein_g, sodium_mg, potassium_mg,
                        cholesterol_mg, carbohydrates_total_g, fiber_g, sugar_g):
@@ -126,6 +138,8 @@ class Page1AddFood(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.custom_font = font.Font(family="typewriter", size=60, weight="normal")
+        custom_font_path = "Login page/impact.ttf"
+        custom_font = font.Font(family=custom_font_path, size=20, weight="bold")
 
         canvas = tk.Canvas(self)
         scrollbar = ttk.Scrollbar(self, orient="vertical", command=canvas.yview)
@@ -161,7 +175,7 @@ class Page1AddFood(tk.Frame):
         main_title = tk.Label(self, image=self.title_image, font=self.custom_font, bg='#b3b5ba', fg='#000000')
         main_title.place(y=20, x=240)
 
-        self.food_entry = tk.Entry(self, font=("typewriter", 20, "normal"), fg="#000000", bd=0, bg='#b3b5ba')
+        self.food_entry = tk.Entry(self, font=custom_font, fg="#000000", bd=0, bg='#b3b5ba')
         self.food_entry.insert(0, "Search Food Here!")
         self.food_entry.place(y=250, x=220)
         self.food_entry.bind("<FocusIn>", self.temp_food_entry_text)
@@ -204,6 +218,8 @@ class Page1AddFood(tk.Frame):
             self.food_entry.delete(0, "end")
     
     def API_connection(self,):    
+        custom_font_path = "Login page/impact.ttf"
+        custom_font = font.Font(family=custom_font_path, size=20, weight="bold")
         self.query = self.food_entry.get().strip()
         self.api_key = self.api_key = os.environ.get('MY_API_KEY')
         self.api_url = f'https://api.api-ninjas.com/v1/nutrition?query={self.query}'
@@ -230,7 +246,7 @@ class Page1AddFood(tk.Frame):
             self.label = Label(
             self,
             bg='#b3b5ba',
-            font=("typewriter", 20, "normal"),
+            font=custom_font,
             text=f"Name: {self.name}\n"
                  f"Calories: {self.calories}\n"
                  f"Serving Size (g): {self.serving_size_g}\n"

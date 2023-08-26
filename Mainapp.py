@@ -14,7 +14,6 @@ class Page1(tk.Frame):
         self.buttons = []
         self.boxs = []
         self.current_y = 0
-        self.current_y_box = 340
         self.total_calories = 0
         custom_font_path = "Login page/impact.ttf"
         custom_font = font.Font(family=custom_font_path, size=20, weight="bold")
@@ -60,7 +59,7 @@ class Page1(tk.Frame):
 
         self.addfood_button = tk.Button(self.frame, text='Add Food', font=custom_font,
                                          command=lambda: self.controller.show_frame(Page1AddFood))
-        self.addfood_button.pack(padx=280, pady=200)
+        self.addfood_button.pack(padx=280, pady=170)
 
         self.calorie_button = ImageTk.PhotoImage(Image.open('Login page/cals button.png'))
         self.weight_button = ImageTk.PhotoImage(Image.open('Login page/weight button.png'))
@@ -96,17 +95,12 @@ class Page1(tk.Frame):
                                                                       protein_g, sodium_mg, potassium_mg,
                                                                       cholesterol_mg, carbohydrates_total_g,
                                                                       fiber_g, sugar_g))
-        
-        #if self.boxs:
-        #    self.current_y_box += 100
-        #self.box = tk.Label(self.frame, image=self.box_image, fg='#000000')
-        #self.box.place(y=self.current_y_box, x=60)
-        #self.boxs.append(self.box)
+
 
         if self.buttons:
             self.current_y += 0
         self.new_button.pack(pady=self.current_y, padx=0)
-        self.new_button.config(text=f"{name}, {calories} cals".title())
+        self.new_button.config(text=f"{name}:                   {calories} cals".title())
         self.new_button.nutrition = {
             "name": name,
             "calories": calories,
@@ -184,19 +178,19 @@ class Page1AddFood(tk.Frame):
 
         self.food_entry = tk.Entry(self, font=custom_font, fg="#000000", bd=0, bg='#b3b5ba')
         self.food_entry.insert(0, "Search Food Here!")
-        self.food_entry.place(y=250, x=220)
+        self.food_entry.place(y=200, x=220)
         self.food_entry.bind("<FocusIn>", self.temp_food_entry_text)
 
         self.search_icon = ImageTk.PhotoImage(Image.open('Login page/search icon.png'))
         self.searchiconbutton = Button(self, image = self.search_icon, bg='#b3b5ba',activebackground='#b3b5ba',
                                        cursor='hand2', bd=0, command=self.API_connection)
-        self.searchiconbutton.place(x=500, y=255)
+        self.searchiconbutton.place(y=205, x=500)
 
         self.add_food_button = ImageTk.PhotoImage(Image.open('Login page/add food button.png'))
 
         add_food_button = tk.Button(self, image=self.add_food_button, bd=5, bg='#b3b5ba', activebackground='#b3b5ba',
                             cursor='hand2', command=self.add_food)
-        add_food_button.place(y=750, x=290)
+        add_food_button.place(y=725, x=290)
         
         self.calorie_button = ImageTk.PhotoImage(Image.open('Login page/cals button.png'))
         self.weight_button = ImageTk.PhotoImage(Image.open('Login page/weight button.png'))
@@ -249,7 +243,7 @@ class Page1AddFood(tk.Frame):
         self.fiber_g = self.data[0]["fiber_g"]
         self.sugar_g = self.data[0]["sugar_g"]
 
-        self.button_border = tk.Frame(self.frame, highlightbackground = "black", 
+        self.button_border = tk.Frame(self, highlightbackground = "black", 
                          highlightthickness = 4)
         self.button_border.pack()
         
@@ -271,7 +265,7 @@ class Page1AddFood(tk.Frame):
                  f"Fiber (g): {self.fiber_g}\n"
                  f"Sugar (g): {self.sugar_g}"
         )
-            self.label.place(y=350, x=200)
+            self.label.place(y=300, x=180)
         else:
             print("Error:", self.response.status_code, self.response.text)
             self.label = Label(self, text=str("Error:", self.response.status_code, self.response.text))
@@ -347,7 +341,7 @@ class FoodInfoPage(tk.Frame):
                 fat_saturated_g, protein_g, sodium_mg, potassium_mg,
                 cholesterol_mg, carbohydrates_total_g, fiber_g, sugar_g):
         info_text = (
-            f"{name.title()},\n\n"
+            f"{name.title()}:\n\n"
             f"Calories: {calories} cals,\n"
             f"Serving Size: {serving_size_g} Grams,\n"
             f"Total Fat: {fat_total_g} Grams,\n"

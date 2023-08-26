@@ -85,8 +85,12 @@ class Page1(tk.Frame):
         custom_font_path = "Login page/impact.ttf"
         custom_font = font.Font(family=custom_font_path, size=20, weight="bold")
 
+        self.button_border = tk.Frame(self.frame, highlightbackground = "black", 
+                         highlightthickness = 4)
+        self.button_border.pack()
 
-        self.new_button = tk.Button(self.frame, text="", font=custom_font, bg='#b3b5ba', bd=0,
+        self.new_button = tk.Button(self.button_border, text="", font=custom_font, bg='#b3b5ba', bd=0,
+                                    highlightbackground="#000000", highlightthickness=10, width=30, 
                                     command=lambda: self.show_food_info(name, calories, serving_size_g,
                                                                       fat_total_g, fat_saturated_g,
                                                                       protein_g, sodium_mg, potassium_mg,
@@ -100,8 +104,8 @@ class Page1(tk.Frame):
         #self.boxs.append(self.box)
 
         if self.buttons:
-            self.current_y += 10
-        self.new_button.pack(pady=self.current_y, padx=200)
+            self.current_y += 0
+        self.new_button.pack(pady=self.current_y, padx=0)
         self.new_button.config(text=f"{name}, {calories} cals".title())
         self.new_button.nutrition = {
             "name": name,
@@ -245,6 +249,10 @@ class Page1AddFood(tk.Frame):
         self.fiber_g = self.data[0]["fiber_g"]
         self.sugar_g = self.data[0]["sugar_g"]
 
+        self.button_border = tk.Frame(self.frame, highlightbackground = "black", 
+                         highlightthickness = 4)
+        self.button_border.pack()
+        
         if self.response.status_code == requests.codes.ok:
             self.label = Label(
             self,
@@ -274,7 +282,8 @@ class FoodInfoPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        self.custom_font = font.Font(family="typewriter", size=60, weight="normal")
+        custom_font_path = "Login page/impact.ttf"
+        custom_font = font.Font(family=custom_font_path, size=20, weight="bold")
         
         canvas = tk.Canvas(self)
         scrollbar = ttk.Scrollbar(self, orient="vertical", command=canvas.yview)
@@ -330,7 +339,7 @@ class FoodInfoPage(tk.Frame):
                             cursor='hand2', command=lambda: self.controller.show_frame(Page3))
         button.place(y=855, x=580)
 
-        self.selected_food_label = Label(frame, text="", font=("typewriter", 20, "normal"), bg='#b3b5ba',
+        self.selected_food_label = Label(frame, text="", font=custom_font, bg='#b3b5ba',
                                              bd= 0) 
         self.selected_food_label.place(y=240, x=200)
 

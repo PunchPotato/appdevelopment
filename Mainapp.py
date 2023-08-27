@@ -84,11 +84,7 @@ class Page1(tk.Frame):
         custom_font_path = "Login page/impact.ttf"
         custom_font = font.Font(family=custom_font_path, size=20, weight="bold")
 
-        self.button_border = tk.Frame(self.frame, highlightbackground="black",
-                                    highlightthickness=4)
-        self.button_border.pack()
-
-        self.new_button = tk.Button(self.button_border, text="", font=custom_font, bg='#b3b5ba', bd=0,
+        self.new_button = tk.Button(self.frame, text="", font=custom_font, bg='#b3b5ba', bd=0,
                                     highlightbackground="#000000", highlightthickness=10, width=30,
                                     command=lambda: self.show_food_info(name, calories, serving_size_g,
                                                                     fat_total_g, fat_saturated_g,
@@ -99,9 +95,9 @@ class Page1(tk.Frame):
                                     bd=0, command=lambda button=self.new_button: self.delete_food(button))
 
         if self.buttons:
-            self.current_y += 0
-        self.new_button.pack(pady=self.current_y, padx=0)
-        self.delete_button.pack(padx= 200)
+            self.current_y += 20
+        self.new_button.pack(pady=(0, 5), padx=0)
+        self.delete_button.pack(padx=200)
         self.new_button.config(text=f"{name}:                   {calories} cals".title())
         self.new_button.nutrition = {
             "name": name,
@@ -131,7 +127,6 @@ class Page1(tk.Frame):
             self.calorie_sum_label.place(y=120, x=75)
             button.destroy()
             self.buttons.remove(button)
-
     def show_food_info(self, name, calories, serving_size_g, fat_total_g,
                        fat_saturated_g, protein_g, sodium_mg, potassium_mg,
                        cholesterol_mg, carbohydrates_total_g, fiber_g, sugar_g):

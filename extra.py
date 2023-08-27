@@ -1,27 +1,15 @@
-
 import tkinter as tk
-  
+
 root = tk.Tk()
-root.geometry('250x150')
-root.title("Button Border")
-  
-# Label
-l = tk.Label(root, text = "Enter your Roll No. :",
-             font = (("Times New Roman"), 15))
-l.pack()
-  
-# Entry Widget
-tk.Entry(root).pack()
-  
-# for space between widgets
-tk.Label(root, text=" ").pack()
-  
-# Frame for button border with black border color
-button_border = tk.Frame(root, highlightbackground = "black", 
-                         highlightthickness = 2, bd=0)
-bttn = tk.Button(button_border, text = 'Submit', fg = 'black',
-                 bg = 'yellow',font = (("Times New Roman"),15))
-bttn.pack()
-button_border.pack()
-  
+root.title("Pack Example")
+
+label1 = tk.Label(root, text="Label 1")
+label2 = tk.Label(root, text="Label 2")
+label3 = tk.Label(root, text="Label 3")
+
+# Packing labels vertically, expanding to fill both directions
+label1.pack(fill="both", expand=True, padx=10, pady=5)
+label2.pack(fill="both", expand=True, padx=10, pady=5)
+label3.pack(fill="both", expand=True, padx=10, pady=5)
+
 root.mainloop()
